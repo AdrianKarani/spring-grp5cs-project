@@ -12,4 +12,7 @@ public class Type {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(mappedBy = "type")
+    private Movie movie;
 }

@@ -19,4 +19,9 @@ public class MovieServiceImpl implements MovieService {
     public Movie createMovie(Movie movie) {
         return null;
     }
+
+    @Override
+    public Movie suggestMovie(Movie movie) {
+        return null;
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.springgrp5csproject.controller;
 
+import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.User;
+import com.example.springgrp5csproject.repositories.UserRepository;
 import com.example.springgrp5csproject.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,19 +11,19 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "users")
 public class UserController {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @GetMapping
     public List<User> findAll() {
-        return userService.findAll();
+        return userRepository.findAll();
     }
 
-    @PostMapping
-    User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping()
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
     }
 }
