@@ -27,11 +27,15 @@ public class Movie {
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "movie")
-    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
     private List<Category> categories;
 
     private Movie() {}
+
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date) {
+        this.name = name;
+        this.release_date = release_date;
+    }
 
     public Movie(String name, String release_date, Type type, List<Category> categories) {
         this.name = name;

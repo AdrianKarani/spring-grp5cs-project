@@ -11,7 +11,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Override
     List<Movie> findAll();
 
-    List<Movie> findMoviesByTypeEquals(Type type);
-    List<Movie> findMoviesByCategoryEquals(Category category);
-    List<Movie> findMoviesByTypeEqualsAndCategoryEquals(Type type, Category category);
+//    List<Movie> findMoviesByTypeEquals(Type type);
+//    List<Movie> findMoviesByCategoryEquals(Category category);
+//    List<Movie> findMoviesByTypeEqualsAndCategoryEquals(Type type, Category category);
 }

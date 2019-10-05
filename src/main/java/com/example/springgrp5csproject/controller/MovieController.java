@@ -29,13 +29,13 @@ public class MovieController {
         return movieRepository.save(movie);
     }
 
-    @PostMapping()
-    public Movie suggestMovie(Movie suggestedMovie) {
-        return movieRepository.save(suggestedMovie);
-    }
+//    @PostMapping()
+//    public Movie suggestMovie(Movie suggestedMovie) {
+//        return movieRepository.save(suggestedMovie);
+//    }
 
-    @GetMapping("{categoryId}")
-    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
-        return movieRepository.findMoviesByTypeEqualsAndCategoryEquals(type, categoryRepository.findByIdEquals(categoryId));
-    }
+//    @GetMapping("{categoryId}")
+//    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
+//        return movieRepository.findMoviesByTypeEqualsAndCategoryEquals(type, categoryRepository.findByIdEquals(categoryId));
+//    }
 }
