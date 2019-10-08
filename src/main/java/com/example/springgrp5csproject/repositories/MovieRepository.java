@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    @Override
-    List<Movie> findAll();
+//    @Override
+//    List<Movie> findAll();
 
 //    List<Movie> findMoviesByTypeEquals(Type type);
 //    List<Movie> findMoviesByCategoryEquals(Category category);

@@ -11,19 +11,24 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "users")
 public class UserController {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @PostMapping()
     public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.createUser(user);
+    }
+
+    @PostMapping()
+    public Movie suggestMovie(@RequestBody Movie movie) {
+        return userService.suggestMovie(movie);
     }
 }

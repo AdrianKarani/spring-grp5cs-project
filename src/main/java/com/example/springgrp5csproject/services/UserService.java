@@ -9,5 +9,5 @@ public interface UserService {
     List<User> findAll();
     User findById(Long id);
     User createUser(User user);
-//    Movie suggestMovie(Movie suggestedMovie);
+    Movie suggestMovie(Movie suggestedMovie);
 }

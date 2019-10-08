@@ -12,14 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "types")
 public class TypeController {
-    private final TypeRepository typeRepository;
+    private final TypeService typeService;
 
-    public TypeController(TypeRepository typeRepository) {
-        this.typeRepository = typeRepository;
+    public TypeController(TypeService typeService) {
+        this.typeService = typeService;
     }
 
     @GetMapping
     public List<Type> findAll() {
-        return typeRepository.findAll();
+        return typeService.findAll();
     }
 }

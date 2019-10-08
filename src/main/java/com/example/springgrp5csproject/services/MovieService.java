@@ -8,5 +8,6 @@ public interface MovieService {
     List<Movie> findAll();
     Movie findById(Long id);
     Movie createMovie(Movie movie);
-    Movie suggestMovie(Movie movie);
+    Movie updateMovie(Movie movie);
+    Movie updateMovie(Long id, Movie movie);
 }

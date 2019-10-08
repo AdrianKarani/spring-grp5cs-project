@@ -4,6 +4,8 @@ import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.repositories.CategoryRepository;
 import com.example.springgrp5csproject.repositories.MovieRepository;
+import com.example.springgrp5csproject.services.CategoryService;
+import com.example.springgrp5csproject.services.MovieService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,22 +13,22 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "universities")
 public class MovieController {
-    private final MovieRepository movieRepository;
-    private final CategoryRepository categoryRepository;
+    private final MovieService movieService;
+    private final CategoryService categoryService;
 
-    public MovieController(MovieRepository movieRepository, CategoryRepository categoryRepository) {
-        this.movieRepository = movieRepository;
-        this.categoryRepository = categoryRepository;
+    public MovieController(MovieService movieService, CategoryService categoryService) {
+        this.movieService = movieService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
     public List<Movie> findAll() {
-        return movieRepository.findAll();
+        return movieService.findAll();
     }
 
     @PostMapping()
     public Movie createOriginalMovie(Movie movie) {
-        return movieRepository.save(movie);
+        return movieService.createMovie(movie);
     }
 
 //    @PostMapping()
