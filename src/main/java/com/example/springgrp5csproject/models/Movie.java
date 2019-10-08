@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "movies")
@@ -27,8 +28,11 @@ public class Movie {
     @JoinColumn(name = "type_id", referencedColumnName = "id")
     private Type type;
 
-    @ManyToMany(mappedBy = "movies")
-    private List<Category> categories;
+    @ManyToMany
+    @JoinTable(name = "genres",
+            joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
+    private Set<Category> categories;
 
     private Movie() {}
 
@@ -37,7 +41,7 @@ public class Movie {
         this.release_date = release_date;
     }
 
-    public Movie(String name, String release_date, Type type, List<Category> categories) {
+    public Movie(String name, String release_date, Type type, Set<Category> categories) {
         this.name = name;
         this.release_date = release_date;
         this.type = type;
@@ -76,11 +80,11 @@ public class Movie {
         this.type = type;
     }
 
-    public List<Category> getCategory() {
+    public Set<Category> getCategory() {
         return categories;
     }
 
-    public void setCategory(List<Category> categories) {
+    public void setCategory(Set<Category> categories) {
         this.categories = categories;
     }
 

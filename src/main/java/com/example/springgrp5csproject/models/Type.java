@@ -16,6 +16,8 @@ public class Type {
     @OneToOne(mappedBy = "type")
     private Movie movie;
 
+    private Type () {}
+
     public Type(String name) {
         this.name = name;
     }

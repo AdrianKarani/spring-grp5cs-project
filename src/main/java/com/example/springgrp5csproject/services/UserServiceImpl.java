@@ -2,6 +2,7 @@ package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
+import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import com.example.springgrp5csproject.repositories.UserRepository;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Movie suggestMovie(Movie suggestedMovie) {
+        suggestedMovie.setType(new Type("SUGGESTED"));
         return movieRepository.save(suggestedMovie);
     }
 }

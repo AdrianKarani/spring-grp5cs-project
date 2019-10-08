@@ -2,6 +2,8 @@ package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
+import com.example.springgrp5csproject.models.Type;
+import com.example.springgrp5csproject.repositories.CategoryRepository;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import java.util.List;
 @Service
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
+    private CategoryService categoryService;
 
     public MovieServiceImpl(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
@@ -45,5 +48,10 @@ public class MovieServiceImpl implements MovieService {
         Movie foundMovie = findById(id);
         foundMovie.setType(movie.getType());
         return movieRepository.save(foundMovie);
+    }
+
+    @Override
+    public List<Movie> availableMovies(Type type, Long categoryId) {
+        return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));
     }
 }

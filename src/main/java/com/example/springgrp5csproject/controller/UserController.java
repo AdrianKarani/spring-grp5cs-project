@@ -27,7 +27,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @PostMapping()
+    @PostMapping("movie_suggest")
     public Movie suggestMovie(@RequestBody Movie movie) {
         return userService.suggestMovie(movie);
     }

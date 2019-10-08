@@ -2,6 +2,7 @@ package com.example.springgrp5csproject.models;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -14,9 +15,10 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "movie_genres", joinColumns = @JoinColumn(name = "movie_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Movie> movies;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Movie> movies;
+
+    private Category() {}
 
     public Category(String name) {
         this.name = name;
@@ -44,5 +46,13 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(Set<Movie> movies) {
+        this.movies = movies;
     }
 }

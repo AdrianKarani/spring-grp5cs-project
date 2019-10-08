@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "universities")
+@RequestMapping(value = "movies")
 public class MovieController {
     private final MovieService movieService;
     private final CategoryService categoryService;
@@ -38,6 +38,6 @@ public class MovieController {
 
 //    @GetMapping("{categoryId}")
 //    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
-//        return movieRepository.findMoviesByTypeEqualsAndCategoryEquals(type, categoryRepository.findByIdEquals(categoryId));
+//        return movieService.availableMovies(type, categoryId);
 //    }
 }
