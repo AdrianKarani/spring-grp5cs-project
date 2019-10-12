@@ -9,6 +9,7 @@ public interface MovieService {
     List<Movie> findAll();
     Movie findById(Long id);
     Movie createMovie(Movie movie);
+    void deleteMovie(Long id);
     Movie updateMovie(Movie movie);
     Movie updateMovie(Long id, Movie movie);
     List<Movie> availableMovies(Type type, Long categoryId);

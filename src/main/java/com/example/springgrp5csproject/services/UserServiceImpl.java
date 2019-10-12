@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
     public Movie suggestMovie(Movie suggestedMovie) {
         suggestedMovie.setType(new Type("SUGGESTED"));
         return movieRepository.save(suggestedMovie);

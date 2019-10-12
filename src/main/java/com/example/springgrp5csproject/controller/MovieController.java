@@ -26,18 +26,26 @@ public class MovieController {
         return movieService.findAll();
     }
 
-    @PostMapping()
+    @PostMapping
     public Movie createOriginalMovie(Movie movie) {
         return movieService.createMovie(movie);
     }
 
-//    @PostMapping()
-//    public Movie suggestMovie(Movie suggestedMovie) {
-//        return movieRepository.save(suggestedMovie);
-//    }
+    @PatchMapping
+    public Movie updateMovie(Movie suggestedMovie) {
+        return movieService.updateMovie(suggestedMovie);
+    }
 
-//    @GetMapping("{categoryId}")
-//    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
-//        return movieService.availableMovies(type, categoryId);
-//    }
+    @PatchMapping(value = "{id}")
+    public Movie updateMovie(@PathVariable Long id, Movie suggestedMovie) {
+        return movieService.updateMovie(id, suggestedMovie);
+    }
+
+    @DeleteMapping(value = "{id}")
+    public void deleteMovie(@PathVariable Long id) { movieService.deleteMovie(id); }
+
+    @GetMapping("{categoryId}")
+    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
+        return movieService.availableMovies(type, categoryId);
+    }
 }

@@ -34,19 +34,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public void deleteMovie(Long id) {
+        movieRepository.deleteById(id);
+    }
+
+    @Override
     public Movie updateMovie(Movie movie) {
         Movie foundMovie = findById(movie.getId());
-//        foundMovie.setCategory(movie.getCategory());
-//        foundMovie.setName(movie.getName());
+        foundMovie.setCategory(movie.getCategory());
+        foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
-//        foundMovie.setRelease_date(movie.getRelease_date());
+        foundMovie.setRelease_date(movie.getRelease_date());
         return movieRepository.save(foundMovie);
     }
 
     @Override
     public Movie updateMovie(Long id, Movie movie) {
         Movie foundMovie = findById(id);
+        foundMovie.setCategory(movie.getCategory());
+        foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
+        foundMovie.setRelease_date(movie.getRelease_date());
         return movieRepository.save(foundMovie);
     }
 

@@ -31,4 +31,9 @@ public class UserController {
     public Movie suggestMovie(@RequestBody Movie movie) {
         return userService.suggestMovie(movie);
     }
+
+    @DeleteMapping(value = "{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
 }
