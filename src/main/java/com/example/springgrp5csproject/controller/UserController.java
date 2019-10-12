@@ -4,6 +4,7 @@ import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.User;
 import com.example.springgrp5csproject.repositories.UserRepository;
 import com.example.springgrp5csproject.services.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Validated(User.Create.class)@RequestBody User user) {
         return userService.createUser(user);
     }
 

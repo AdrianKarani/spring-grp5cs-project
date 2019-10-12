@@ -1,20 +1,20 @@
 package com.example.springgrp5csproject.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull(groups = Update.class)
     @Column(name = "id")
     private Long id;
 
+    @NotNull(groups = Create.class)
     @Column(name = "name")
     private String name;
-
-//    @OneToMany
-//    private Movie suggestedMovie;
 
     private User() {}
 
@@ -38,13 +38,9 @@ public class User {
         this.name = name;
     }
 
-//    public Movie getSuggestedMovie() {
-//        return suggestedMovie;
-//    }
-//
-//    public void setSuggestedMovie(Movie suggestedMovie) {
-//        this.suggestedMovie = suggestedMovie;
-//    }
+    public interface Update {}
+
+    public interface Create {}
 
     @Override
     public String toString() {

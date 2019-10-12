@@ -1,15 +1,18 @@
 package com.example.springgrp5csproject.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "types")
 public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull(groups = Update.class)
     @Column(name = "id")
     private Long id;
 
+    @NotNull(groups = Create.class)
     @Column(name = "name")
     private String name;
 
@@ -37,6 +40,10 @@ public class Type {
     public void setName(String name) {
         this.name = name;
     }
+
+    public interface Update {}
+
+    public interface Create {}
 
     @Override
     public String toString() {

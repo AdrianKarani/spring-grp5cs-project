@@ -6,6 +6,7 @@ import com.example.springgrp5csproject.repositories.CategoryRepository;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import com.example.springgrp5csproject.services.CategoryService;
 import com.example.springgrp5csproject.services.MovieService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,17 +28,17 @@ public class MovieController {
     }
 
     @PostMapping
-    public Movie createOriginalMovie(Movie movie) {
+    public Movie createOriginalMovie(@Validated(Movie.Create.class)Movie movie) {
         return movieService.createMovie(movie);
     }
 
     @PatchMapping
-    public Movie updateMovie(Movie suggestedMovie) {
+    public Movie updateMovie(@Validated(Movie.Update.class)Movie suggestedMovie) {
         return movieService.updateMovie(suggestedMovie);
     }
 
     @PatchMapping(value = "{id}")
-    public Movie updateMovie(@PathVariable Long id, Movie suggestedMovie) {
+    public Movie updateMovie(@PathVariable Long id, @Validated(Movie.Update.class)Movie suggestedMovie) {
         return movieService.updateMovie(id, suggestedMovie);
     }
 

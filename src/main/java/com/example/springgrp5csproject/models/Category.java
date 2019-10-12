@@ -1,6 +1,7 @@
 package com.example.springgrp5csproject.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -9,9 +10,11 @@ import java.util.Set;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @NotNull(groups = Update.class)
     @Column(name = "id")
     private Long id;
 
+    @NotNull(groups = Create.class)
     @Column(name = "name")
     private String name;
 
@@ -31,6 +34,10 @@ public class Category {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public interface Update {}
+
+    public interface Create {}
 
     @Override
     public String toString() {
