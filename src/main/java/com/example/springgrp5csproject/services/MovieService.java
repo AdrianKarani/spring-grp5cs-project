@@ -2,15 +2,27 @@ package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
+import com.example.springgrp5csproject.models.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface MovieService {
+//    CRUD
     List<Movie> findAll();
     Movie findById(Long id);
-    Movie createMovie(Movie movie);
     void deleteMovie(Long id);
+    Movie createMovie(Movie movie);
     Movie updateMovie(Movie movie);
     Movie updateMovie(Long id, Movie movie);
+
+//    Complex
+    Movie getMovie(String movieName);
+    Set<Movie> getMovies(Set<String> movieNames);
+    String getReleaseDate(String movieName);
+    List<Movie> likedMovies();
+    List<Movie> suggestedMovies();
     List<Movie> availableMovies(Type type, Long categoryId);
+    List<User> usersWhoLiked(Long movieId);
+    List<User> usersWhoSuggested(Long movieId);
 }

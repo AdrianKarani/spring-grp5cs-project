@@ -3,11 +3,15 @@ package com.example.springgrp5csproject.services;
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
+import com.example.springgrp5csproject.models.User;
 import com.example.springgrp5csproject.repositories.CategoryRepository;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MovieServiceImpl implements MovieService {
@@ -29,8 +33,39 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public String getReleaseDate(String movieName) {
+        Movie foundMovie = movieRepository.findByNameEquals(movieName);
+        return foundMovie.getRelease_date();
+    }
+
+    @Override
+    public List<Movie> likedMovies() {
+        return movieRepository.findAllByUsersWhoLikedIsNotNull();
+    }
+
+    @Override
+    public List<Movie> suggestedMovies() {
+        return movieRepository.findAllByUsersWhoSuggestedIsNotNull();
+    }
+
+    @Override
     public Movie createMovie(Movie movie) {
         return movieRepository.save(movie);
+    }
+
+    @Override
+    public Movie getMovie(String movieName) {
+        return movieRepository.findByNameEquals(movieName);
+    }
+
+    @Override
+    public Set<Movie> getMovies(Set<String> movieNames) {
+        for (String movieName : movieNames) {
+            Set<Movie> foundMovies = new HashSet<>();
+            foundMovies.add(getMovie(movieName));
+            return foundMovies;
+        }
+        return null;
     }
 
     @Override
@@ -61,5 +96,17 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> availableMovies(Type type, Long categoryId) {
         return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));
+    }
+
+    @Override
+    public List<User> usersWhoLiked(Long movieId) {
+        Movie foundMovie = findById(movieId);
+        return new ArrayList<>(foundMovie.getUsersWhoLiked());
+    }
+
+    @Override
+    public List<User> usersWhoSuggested(Long movieId) {
+        Movie foundMovie = findById(movieId);
+        return new ArrayList<>(foundMovie.getUsersWhoSuggested());
     }
 }

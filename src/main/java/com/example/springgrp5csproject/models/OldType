@@ -2,12 +2,11 @@ package com.example.springgrp5csproject.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Set;
+// TODO: Make Type an Enum
 
 @Entity
-@Table(name = "categories")
-public class Category {
+@Table(name = "types")
+public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @NotNull(groups = Update.class)
@@ -18,12 +17,12 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "categories", cascade = {CascadeType.ALL})
-    private Set<Movie> movies;
+    @OneToOne(mappedBy = "type")
+    private Movie movie;
 
-    private Category() {}
+    private Type () {}
 
-    public Category(String name) {
+    public Type(String name) {
         this.name = name;
     }
 
@@ -35,18 +34,6 @@ public class Category {
         this.id = id;
     }
 
-    public interface Update {}
-
-    public interface Create {}
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public String getName() {
         return name;
     }
@@ -55,11 +42,15 @@ public class Category {
         this.name = name;
     }
 
-    public Set<Movie> getMovies() {
-        return movies;
-    }
+    public interface Update {}
 
-    public void setMovies(Set<Movie> movies) {
-        this.movies = movies;
+    public interface Create {}
+
+    @Override
+    public String toString() {
+        return "Type{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

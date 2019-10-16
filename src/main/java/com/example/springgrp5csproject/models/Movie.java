@@ -1,10 +1,7 @@
 package com.example.springgrp5csproject.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,15 +21,22 @@ public class Movie {
     @Column(name = "release_date")
     private String release_date;
 
-    @OneToOne
-    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    @Enumerated(EnumType.ORDINAL)
+//    @Convert(converter = PriorityJpaConverter.class)
+    @Column(name = "movie_type")
     private Type type;
 
-    @ManyToMany
-    @JoinTable(name = "genres",
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name = "movie_genres",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<Category> categories;
+
+    @ManyToMany(mappedBy = "favouriteMovies", cascade = {CascadeType.ALL})
+    private Set<User> usersWhoLiked;
+
+    @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.ALL})
+    private Set<User> usersWhoSuggested;
 
     private Movie() {}
 
@@ -86,6 +90,30 @@ public class Movie {
 
     public void setCategory(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    public Set<User> getUsersWhoLiked() {
+        return usersWhoLiked;
+    }
+
+    public void setUsersWhoLiked(Set<User> usersWhoLiked) {
+        this.usersWhoLiked = usersWhoLiked;
+    }
+
+    public Set<User> getUsersWhoSuggested() {
+        return usersWhoSuggested;
+    }
+
+    public void setUsersWhoSuggested(Set<User> usersWhoSuggested) {
+        this.usersWhoSuggested = usersWhoSuggested;
     }
 
     public interface Update {}
