@@ -22,7 +22,7 @@ public class Movie {
 
     @NotNull(groups = Create.class)
     @Column(name = "release_date")
-    private String release_date;
+    private String releaseDate;
 
     @Enumerated(EnumType.STRING)
 //    @Convert(converter = PriorityJpaConverter.class)
@@ -44,15 +44,15 @@ public class Movie {
 
     private Movie() {}
 
-    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date) {
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate) {
         this.name = name;
-        this.release_date = release_date;
+        this.releaseDate = releaseDate;
     }
 
 //    With Type
-    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date, Type type) {
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, Type type) {
         this.name = name;
-        this.release_date = release_date;
+        this.releaseDate = releaseDate;
         this.type = type;
     }
 
@@ -72,12 +72,12 @@ public class Movie {
         this.name = name;
     }
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public Type getType() {
@@ -150,7 +150,7 @@ public class Movie {
         return "Movie{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", release_date='" + release_date + '\'' +
+                ", release_date='" + releaseDate + '\'' +
                 ", type=" + type +
                 ", categories=" + categories +
                 '}';

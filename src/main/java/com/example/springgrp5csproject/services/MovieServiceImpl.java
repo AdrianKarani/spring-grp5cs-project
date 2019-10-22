@@ -1,7 +1,6 @@
 package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
-import com.example.springgrp5csproject.models.Category;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
@@ -36,7 +35,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public String getReleaseDate(String movieName) {
         Movie foundMovie = movieRepository.findByNameEquals(movieName);
-        return foundMovie.getRelease_date();
+        return foundMovie.getReleaseDate();
     }
 
     @Override
@@ -50,20 +49,28 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie createMovie(Movie movie) {
-        return movieRepository.save(movie);
+    public Movie createMovie(Movie movie) throws Exception {
+        if (!movie.equals(movieRepository.findByNameEquals(movie.getName())) || !movie.equals(movieRepository.findByReleaseDateEquals(movie.getReleaseDate()))) {
+            return movieRepository.save(movie);
+        }
+        throw new Exception("Movie already Exists.");
     }
 
     @Override
-    public Movie getMovie(String movieName) {
+    public Movie findByName(String movieName) {
         return movieRepository.findByNameEquals(movieName);
     }
 
     @Override
-    public Set<Movie> getMovies(Set<String> movieNames) {
+    public Movie findByReleaseDate(String releaseDate) {
+        return movieRepository.findByReleaseDateEquals(releaseDate);
+    }
+
+    @Override
+    public Set<Movie> findByName(Set<String> movieNames) {
         for (String movieName : movieNames) {
             Set<Movie> foundMovies = new HashSet<>();
-            foundMovies.add(getMovie(movieName));
+            foundMovies.add(findByName(movieName));
             return foundMovies;
         }
         return null;
@@ -81,7 +88,7 @@ public class MovieServiceImpl implements MovieService {
         foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
-        foundMovie.setRelease_date(movie.getRelease_date());
+        foundMovie.setReleaseDate(movie.getReleaseDate());
         return movieRepository.save(foundMovie);
     }
 
@@ -91,7 +98,7 @@ public class MovieServiceImpl implements MovieService {
         foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
-        foundMovie.setRelease_date(movie.getRelease_date());
+        foundMovie.setReleaseDate(movie.getReleaseDate());
         return movieRepository.save(foundMovie);
     }
 

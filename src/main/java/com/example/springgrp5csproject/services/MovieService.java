@@ -12,13 +12,14 @@ public interface MovieService {
     List<Movie> findAll();
     Movie findById(Long id);
     void deleteMovie(Long id);
-    Movie createMovie(Movie movie);
+    Movie createMovie(Movie movie) throws Exception;
     Movie updateMovie(Movie movie);
     Movie updateMovie(Long id, Movie movie);
 
 //    Complex
-    Movie getMovie(String movieName);
-    Set<Movie> getMovies(Set<String> movieNames);
+    Movie findByName(String movieName);
+    Movie findByReleaseDate(String releaseDate);
+    Set<Movie> findByName(Set<String> movieNames);
     String getReleaseDate(String movieName);
     List<Movie> likedMovies();
     List<Movie> suggestedMovies();

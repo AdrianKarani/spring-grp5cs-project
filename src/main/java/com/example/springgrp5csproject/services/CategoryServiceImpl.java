@@ -2,8 +2,6 @@ package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Category;
-import com.example.springgrp5csproject.models.User;
-import com.example.springgrp5csproject.models.UserRole;
 import com.example.springgrp5csproject.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +22,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findByName(String name) {
+        return categoryRepository.findByNameEquals(name);
+    }
+
+    @Override
     public List<Category> findAll() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public Category createCategory(Category category) {
+    public Category createCategory(Category category) throws Exception {
 //        User foundUser = userService.findById(id);
-        return categoryRepository.save(category);
+        if (!category.equals(categoryRepository.findByNameEquals(category.getName()))) {
+            return categoryRepository.save(category);
+        }
+        throw new Exception("Category already Exists.");
 //        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
 //            return categoryRepository.save(category);
 //        } else {

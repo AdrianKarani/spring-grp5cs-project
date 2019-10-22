@@ -11,6 +11,7 @@ import java.util.Set;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     Movie findByNameEquals(String name);
+    Movie findByReleaseDateEquals(String releaseDate);
     List<Movie> findMoviesByTypeEquals(Type type);
     List<Movie> findAllByUsersWhoLikedIsNotNull();
     List<Movie> findAllByUsersWhoSuggestedIsNotNull();
