@@ -1,10 +1,7 @@
 package com.example.springgrp5csproject.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -25,10 +22,6 @@ public class SuggestedMovie {
     @Column(name = "release_date")
     private String release_date;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(name = "movie_type")
-    private Type type;
-
     @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.ALL})
     private Set<User> usersWhoSuggested;
 
@@ -37,13 +30,6 @@ public class SuggestedMovie {
     public SuggestedMovie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date) {
         this.name = name;
         this.release_date = release_date;
-    }
-
-    //    With Type
-    public SuggestedMovie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date, Type type) {
-        this.name = name;
-        this.release_date = release_date;
-        this.type = type;
     }
 
     public Long getId() {
@@ -70,12 +56,8 @@ public class SuggestedMovie {
         this.release_date = release_date;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
+    public void setUserWhoSuggested(User usersWhoSuggested) {
+        this.usersWhoSuggested.add(usersWhoSuggested);
     }
 
     public Set<User> getUsersWhoSuggested() {
@@ -83,7 +65,11 @@ public class SuggestedMovie {
     }
 
     public void setUsersWhoSuggested(Set<User> usersWhoSuggested) {
-        this.usersWhoSuggested = usersWhoSuggested;
+        if (this.usersWhoSuggested == null) {
+            this.usersWhoSuggested = usersWhoSuggested;
+        } else {
+            this.usersWhoSuggested.addAll(usersWhoSuggested);
+        }
     }
 
     public interface Update {}
@@ -96,7 +82,6 @@ public class SuggestedMovie {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", release_date='" + release_date + '\'' +
-                ", type=" + type +
                 '}';
     }
 }

@@ -1,10 +1,10 @@
 package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
+import com.example.springgrp5csproject.models.Category;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
-import com.example.springgrp5csproject.repositories.CategoryRepository;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,11 @@ import java.util.Set;
 @Service
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    public MovieServiceImpl(MovieRepository movieRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService) {
         this.movieRepository = movieRepository;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -70,6 +71,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
+        System.out.println("The Following Movie with ID: " + id + "is being Deleted.");
         movieRepository.deleteById(id);
     }
 
@@ -94,11 +96,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> availableMovies(String typeString, Long categoryId) throws Exception {
-        if (typeString != Type.ORIGINAL.name() || typeString != Type.SUGGESTED.name()) {
-            throw new Exception("Please Use ALL CAPS");
+    public List<Movie> availableMovies(String typeString, Long categoryId) {
+//        System.out.println("The Type: " + typeString);
+//        System.out.println("The Expected Type: " + Type.ORIGINAL.name());
+        if (typeString.equals(Type.ORIGINAL.name())) {
+            System.out.println("Netflix Original");
+        } else if (typeString.equals(Type.SUGGESTED.name())) {
+            System.out.println("User Suggested.");
+        } else {
+            System.out.println("Not on Catalogue");
         }
+//        if (!typeString.equals(Type.ORIGINAL.name())) {
+//            throw new Exception("Please Use ALL CAPS");
+//        } else if (!typeString.equals(Type.SUGGESTED.name())) {
+//            throw new Exception("Please Use ALL CAPS");
+//        } else {
+//
+//        }
         Type type = Type.valueOf(typeString);
+//        System.out.println("The Type: " + type.name());
+//        Category category = categoryService.findById(categoryId);
+//        System.out.println("The Category: " + category.toString());
         return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));
     }
 

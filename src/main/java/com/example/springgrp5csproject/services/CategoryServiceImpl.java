@@ -11,11 +11,9 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-    private final UserService userService;
     private final CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(UserService userService, CategoryRepository categoryRepository) {
-        this.userService = userService;
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
@@ -31,47 +29,55 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(Long id, Category category) throws Exception {
-        User foundUser = userService.findById(id);
-        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            return categoryRepository.save(category);
-        } else {
-            throw new Exception("Unauthorized User.");
-        }
+    public Category createCategory(Category category) {
+//        User foundUser = userService.findById(id);
+        return categoryRepository.save(category);
+//        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+//            return categoryRepository.save(category);
+//        } else {
+//            throw new Exception("Unauthorized User.");
+//        }
     }
 
     @Override
-    public void deleteCategory(Long id, Long categoryId) throws Exception {
-        User foundUser = userService.findById(id);
-        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            categoryRepository.deleteById(categoryId);
-            System.out.println("The Category with ID: " + categoryId + " has been deleted.");
-        } else {
-            throw new Exception("Unauthorized User.");
-        }
+    public void deleteCategory(Long categoryId) {
+//        User foundUser = userService.findById(id);
+        categoryRepository.deleteById(categoryId);
+//        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+//            categoryRepository.deleteById(categoryId);
+//            System.out.println("The Category with ID: " + categoryId + " has been deleted.");
+//        } else {
+//            throw new Exception("Unauthorized User.");
+//        }
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) throws Exception {
-        User foundUser = userService.findById(id);
-        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            Category foundCategory = findById(category.getId());
-            foundCategory.setName(category.getName());
-            return categoryRepository.save(foundCategory);
-        } else {
-            throw new Exception("Unauthorized User.");
-        }
+    public Category updateCategory(Category category) {
+//        User foundUser = userService.findById(id);
+        Category foundCategory = findById(category.getId());
+        foundCategory.setName(category.getName());
+        return categoryRepository.save(foundCategory);
+//        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+//            Category foundCategory = findById(category.getId());
+//            foundCategory.setName(category.getName());
+//            return categoryRepository.save(foundCategory);
+//        } else {
+//            throw new Exception("Unauthorized User.");
+//        }
     }
 
     @Override
-    public Category updateCategory(Long id, Category category, Long categoryId) throws Exception {
-        User foundUser = userService.findById(id);
-        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            Category foundCategory = findById(id);
-            foundCategory.setName(category.getName());
-            return categoryRepository.save(foundCategory);
-        } else {
-            throw new Exception("Unauthorized User.");
-        }
+    public Category updateCategory(Category category, Long categoryId) {
+//        User foundUser = userService.findById(id);
+        Category foundCategory = findById(categoryId);
+        foundCategory.setName(category.getName());
+        return categoryRepository.save(foundCategory);
+//        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+//            Category foundCategory = findById(categoryId);
+//            foundCategory.setName(category.getName());
+//            return categoryRepository.save(foundCategory);
+//        } else {
+//            throw new Exception("Unauthorized User.");
+//        }
     }
 }

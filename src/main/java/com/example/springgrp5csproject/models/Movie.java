@@ -93,7 +93,6 @@ public class Movie {
 //    }
 
     public void setCategory(Category category) {
-//        this.categories.add(category);
         if (this.categories == null) {
             this.categories = new HashSet<Category>() {{ add(category); }};
         } else {
@@ -121,12 +120,25 @@ public class Movie {
         this.usersWhoLiked = usersWhoLiked;
     }
 
+    public void setUserWhoSuggested(User userWhoSuggested) {
+//        this.usersWhoSuggested.add(userWhoSuggested);
+        if (this.usersWhoSuggested == null) {
+            this.usersWhoSuggested = new HashSet<User>() {{ add(userWhoSuggested); }};
+        } else {
+            this.usersWhoSuggested.add(userWhoSuggested);
+        }
+    }
+
     public Set<User> getUsersWhoSuggested() {
         return usersWhoSuggested;
     }
 
     public void setUsersWhoSuggested(Set<User> usersWhoSuggested) {
-        this.usersWhoSuggested = usersWhoSuggested;
+        if (this.usersWhoSuggested == null) {
+            this.usersWhoSuggested = usersWhoSuggested;
+        } else {
+            this.usersWhoSuggested.addAll(usersWhoSuggested);
+        }
     }
 
     public interface Update {}

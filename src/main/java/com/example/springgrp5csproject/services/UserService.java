@@ -1,5 +1,6 @@
 package com.example.springgrp5csproject.services;
 
+import com.example.springgrp5csproject.models.Category;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.SuggestedMovie;
 import com.example.springgrp5csproject.models.User;
@@ -16,9 +17,15 @@ public interface UserService {
     void deleteUser(Long id);
     List<SuggestedMovie> suggestedMovies(Long id);
     List<Movie> favouriteMovies(Long id);
-    void addFavourite(Long customerId, String favouriteMovieName);
+    Movie addFavourite(Long customerId, String favouriteMovieName);
     void addFavourites(Long customerId, Set<String> favouriteMovieNames);
-    void suggestMovie(Long customerId, SuggestedMovie suggestedMovie);
+    SuggestedMovie suggestMovie(Long customerId, SuggestedMovie suggestedMovie);
     void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovie);
-    void approveSuggestion(Long customerId, Long suggestedMovieId);
+    Movie approveSuggestion(Long customerId, Long suggestedMovieId);
+
+//    Category CRUD
+    public Category createCategory(Long id, Category category) throws Exception;
+    public void deleteCategory(Long id, Long categoryId) throws Exception;
+    public Category updateCategory(Long id, Category category) throws Exception;
+    public Category updateCategory(Long id, Category category, Long categoryId) throws Exception;
 }

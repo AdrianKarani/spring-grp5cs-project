@@ -1,7 +1,6 @@
 package com.example.springgrp5csproject.controller;
 
 import com.example.springgrp5csproject.models.Movie;
-import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
 import com.example.springgrp5csproject.services.CategoryService;
 import com.example.springgrp5csproject.services.MovieService;
