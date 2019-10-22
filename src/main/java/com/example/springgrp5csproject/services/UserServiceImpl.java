@@ -1,10 +1,7 @@
 package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
-import com.example.springgrp5csproject.models.Movie;
-import com.example.springgrp5csproject.models.Type;
-import com.example.springgrp5csproject.models.User;
-import com.example.springgrp5csproject.models.UserRole;
+import com.example.springgrp5csproject.models.*;
 import com.example.springgrp5csproject.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +12,12 @@ import java.util.Set;
 @Service
 public class UserServiceImpl implements UserService {
     private final MovieService movieService;
+    private final SuggestedMovieService suggestedMovieService;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(MovieService movieService, UserRepository userRepository) {
+    public UserServiceImpl(MovieService movieService, SuggestedMovieService suggestedMovieService, UserRepository userRepository) {
         this.movieService = movieService;
+        this.suggestedMovieService = suggestedMovieService;
         this.userRepository = userRepository;
     }
 
@@ -58,9 +57,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Movie> suggestedMovies(Long id) {
+    public List<SuggestedMovie> suggestedMovies(Long id) {
         User foundUser = findById(id);
-        return new ArrayList<>(foundUser.getSuggestedMovies());
+        return new ArrayList<SuggestedMovie>(foundUser.getSuggestedMovies());
     }
 
     @Override
@@ -76,8 +75,6 @@ public class UserServiceImpl implements UserService {
         if (movieService.getMovie(favouriteMovieName) != null) {
             foundUser.setFavouriteMovie(foundMovie);
         }
-//        System.out.println(foundMovie.toString());
-//        System.out.println(foundUser.toString());
         userRepository.save(foundUser);
     }
 
@@ -90,7 +87,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void suggestMovie(Long customerId, Movie suggestedMovie) {
+    public void suggestMovie(Long customerId, SuggestedMovie suggestedMovie) {
         User foundUser = findById(customerId);
         suggestedMovie.setType(Type.SUGGESTED);
         foundUser.setSuggestedMovie(suggestedMovie);
@@ -98,30 +95,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void suggestMovies(Long customerId, Set<Movie> suggestedMovies) {
+    public void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovies) {
         User foundUser = findById(customerId);
-        for (Movie movie : suggestedMovies) {
-            movie.setType(Type.SUGGESTED);
+        for (SuggestedMovie suggestedMovie : suggestedMovies) {
+            suggestedMovie.setType(Type.SUGGESTED);
         }
         foundUser.setSuggestedMovies(suggestedMovies);
         userRepository.save(foundUser);
     }
 
     @Override
-    public void approveSuggestion(Long customerId, Movie suggestedMovie) {
+    public void approveSuggestion(Long customerId, Long suggestedMovieId) {
         User foundUser = findById(customerId);
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            movieService.createMovie(suggestedMovie);
-        }
-    }
-
-    @Override
-    public void approveSuggestions(Long customerId, Set<Movie> suggestedMovies) {
-        User foundUser = findById(customerId);
-        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            for (Movie movie : suggestedMovies) {
-                movieService.createMovie(movie);
-            }
+            SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);
+            Movie movie = new Movie(suggestedMovie.getName(), suggestedMovie.getRelease_date());
+            movieService.createMovie(movie);
         }
     }
 }

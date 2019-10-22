@@ -41,21 +41,37 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+    public void deleteCategory(Long id, Long categoryId) throws Exception {
+        User foundUser = userService.findById(id);
+        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            categoryRepository.deleteById(categoryId);
+            System.out.println("The Category with ID: " + categoryId + " has been deleted.");
+        } else {
+            throw new Exception("Unauthorized User.");
+        }
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        Category foundCategory = findById(category.getId());
-        foundCategory.setName(category.getName());
-        return categoryRepository.save(foundCategory);
+    public Category updateCategory(Long id, Category category) throws Exception {
+        User foundUser = userService.findById(id);
+        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            Category foundCategory = findById(category.getId());
+            foundCategory.setName(category.getName());
+            return categoryRepository.save(foundCategory);
+        } else {
+            throw new Exception("Unauthorized User.");
+        }
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
-        Category foundCategory = findById(id);
-        foundCategory.setName(category.getName());
-        return categoryRepository.save(foundCategory);
+    public Category updateCategory(Long id, Category category, Long categoryId) throws Exception {
+        User foundUser = userService.findById(id);
+        if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            Category foundCategory = findById(id);
+            foundCategory.setName(category.getName());
+            return categoryRepository.save(foundCategory);
+        } else {
+            throw new Exception("Unauthorized User.");
+        }
     }
 }

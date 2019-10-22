@@ -50,9 +50,14 @@ public class MovieController {
     public void deleteMovie(@PathVariable Long id) { movieService.deleteMovie(id); }
 
 //    Use Category Id and Specific Type
-    @GetMapping("{categoryId}")
-    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam Type type) {
-        return movieService.availableMovies(type, categoryId);
+    @GetMapping("available_movies/{categoryId}")
+    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam String type) {
+        try {
+            return movieService.availableMovies(type, categoryId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 //    Get the Release Date of the Movie with the movie's name

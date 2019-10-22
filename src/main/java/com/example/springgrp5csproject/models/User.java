@@ -20,7 +20,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
 //    @Convert(converter = PriorityJpaConverter.class)
     @Column(name = "user_role")
     private UserRole userRole;
@@ -34,10 +34,10 @@ public class User {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JsonIgnore
-    @JoinTable(name = "suggested_movies",
+    @JoinTable(name = "suggestions",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"))
-    private Set<Movie> suggestedMovies;
+    private Set<SuggestedMovie> suggestedMovies;
 
     private User() {}
 
@@ -85,11 +85,11 @@ public class User {
         this.favouriteMovies.add(favouriteMovie);
     }
 
-    public Set<Movie> getSuggestedMovies() {
+    public Set<SuggestedMovie> getSuggestedMovies() {
         return suggestedMovies;
     }
 
-    public void setSuggestedMovies(Set<Movie> suggestedMovies) {
+    public void setSuggestedMovies(Set<SuggestedMovie> suggestedMovies) {
         if (this.suggestedMovies == null) {
             this.suggestedMovies = suggestedMovies;
         } else {
@@ -97,7 +97,7 @@ public class User {
         }
     }
 
-    public void setSuggestedMovie(Movie suggestedMovie) {
+    public void setSuggestedMovie(SuggestedMovie suggestedMovie) {
         this.suggestedMovies.add(suggestedMovie);
     }
 

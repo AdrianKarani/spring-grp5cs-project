@@ -8,6 +8,8 @@ import com.example.springgrp5csproject.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+
 @Component
 public class DummyData implements CommandLineRunner {
 //    private final TypeRepository typeRepository;
@@ -36,12 +38,16 @@ public class DummyData implements CommandLineRunner {
         categoryRepository.save(horror);
         Category scifi = new Category("Sci-Fi");
         categoryRepository.save(scifi);
+        Category fanstasy = new Category("Fantasy");
+        categoryRepository.save(fanstasy);
         Category comedy = new Category("Comedy");
         categoryRepository.save(comedy);
         Category action = new Category("Action");
         categoryRepository.save(action);
         Category thriller = new Category("Thriller");
         categoryRepository.save(thriller);
+        Category drama = new Category("Drama");
+        categoryRepository.save(drama);
         Category cartoon = new Category("Cartoon");
         categoryRepository.save(cartoon);
         Category anime = new Category("Anime");
@@ -70,17 +76,21 @@ public class DummyData implements CommandLineRunner {
         userRepository.save(angela);
 
 //        Movies
-        Movie yourName = new Movie("Your Name", "26/8/2016");
-        yourName.setType(Type.ORIGINAL);
+        Movie yourName = new Movie("Your Name", "26/8/2016", Type.ORIGINAL);
         movieRepository.save(yourName);
-        Movie joker = new Movie("Joker", "31/8/2019");
-        yourName.setType(Type.ORIGINAL);
+        Movie joker = new Movie("Joker", "31/8/2019", Type.ORIGINAL);
         movieRepository.save(joker);
-        Movie kingKong = new Movie("KingKong", "26/8/2016");
-        yourName.setType(Type.ORIGINAL);
+        Movie kingKong = new Movie("Kong Skull Island", "28/2/2017", Type.ORIGINAL);
         movieRepository.save(kingKong);
-        Movie godzilla = new Movie("Godzilla", "26/8/2019");
-        yourName.setType(Type.ORIGINAL);
+        Movie godzilla = new Movie("Godzilla: King of the Monsters", "13/5/2019", Type.ORIGINAL);
         movieRepository.save(godzilla);
+
+//        Assign Categories to Movie
+        yourName.setCategories(new HashSet<Category>() {{ add(anime); }});
+        movieRepository.save(yourName);
+        joker.setCategories(new HashSet<Category>() {{add(drama); add(thriller);}});
+        movieRepository.save(joker);
+        kingKong.setCategories(new HashSet<Category>() {{ add(fanstasy); add(scifi); }});
+        movieRepository.save(kingKong);
     }
 }

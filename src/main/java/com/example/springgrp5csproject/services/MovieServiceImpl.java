@@ -76,7 +76,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie updateMovie(Movie movie) {
         Movie foundMovie = findById(movie.getId());
-        foundMovie.setCategory(movie.getCategory());
+        foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
         foundMovie.setRelease_date(movie.getRelease_date());
@@ -86,7 +86,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public Movie updateMovie(Long id, Movie movie) {
         Movie foundMovie = findById(id);
-        foundMovie.setCategory(movie.getCategory());
+        foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
         foundMovie.setType(movie.getType());
         foundMovie.setRelease_date(movie.getRelease_date());
@@ -94,7 +94,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> availableMovies(Type type, Long categoryId) {
+    public List<Movie> availableMovies(String typeString, Long categoryId) throws Exception {
+        if (typeString != Type.ORIGINAL.name() || typeString != Type.SUGGESTED.name()) {
+            throw new Exception("Please Use ALL CAPS");
+        }
+        Type type = Type.valueOf(typeString);
         return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));
     }
 

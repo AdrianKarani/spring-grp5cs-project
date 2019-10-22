@@ -21,8 +21,8 @@ public class CategoryController {
         return categoryService.findAll();
     }
 
-    @PostMapping()
-    public Category createCategory(@RequestParam Long id, Category category) throws Exception {
-        return categoryService.createCategory(id, category);
-    }
+//    @PostMapping()
+//    public Category createCategory(@RequestParam Long id, @RequestBody Category category) throws Exception {
+//        return categoryService.createCategory(id, category);
+//    }
 }

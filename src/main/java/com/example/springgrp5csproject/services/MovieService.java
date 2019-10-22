@@ -22,7 +22,7 @@ public interface MovieService {
     String getReleaseDate(String movieName);
     List<Movie> likedMovies();
     List<Movie> suggestedMovies();
-    List<Movie> availableMovies(Type type, Long categoryId);
+    List<Movie> availableMovies(String type, Long categoryId) throws Exception;
     List<User> usersWhoLiked(Long movieId);
     List<User> usersWhoSuggested(Long movieId);
 }
