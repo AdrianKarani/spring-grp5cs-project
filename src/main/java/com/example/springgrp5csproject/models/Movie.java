@@ -56,6 +56,21 @@ public class Movie {
         this.type = type;
     }
 
+//    With Category String
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, String categoryName) {
+        this.name = name;
+        this.releaseDate = releaseDate;
+        this.categories = new HashSet<Category>() {{ add(new Category(categoryName)); }};
+    }
+
+//    With Both Type and Category String
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, Type type, String categoryName) {
+        this.name = name;
+        this.releaseDate = releaseDate;
+        this.type = type;
+        this.categories = new HashSet<Category>() {{ add(new Category(categoryName)); }};
+    }
+
     public Long getId() {
         return id;
     }
@@ -94,8 +109,10 @@ public class Movie {
 
     public void setCategory(Category category) {
         if (this.categories == null) {
+            System.out.println("Adding a Category to empty set");
             this.categories = new HashSet<Category>() {{ add(category); }};
         } else {
+            System.out.println("Adding a Category to existing set");
             this.categories.add(category);
         }
     }

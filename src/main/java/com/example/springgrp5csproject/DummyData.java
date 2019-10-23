@@ -50,8 +50,8 @@ public class DummyData implements CommandLineRunner {
         categoryRepository.save(drama);
         Category cartoon = new Category("Cartoon");
         categoryRepository.save(cartoon);
-        Category anime = new Category("Anime");
-        categoryRepository.save(anime);
+//        Category anime = new Category("Anime");
+//        categoryRepository.save(anime);
 //        Types
 //        Type suggested = new Type("suggested");
 //        typeRepository.save(suggested);
@@ -76,7 +76,7 @@ public class DummyData implements CommandLineRunner {
         userRepository.save(angela);
 
 //        Movies
-        Movie yourName = new Movie("Your Name", "26/8/2016", Type.ORIGINAL);
+        Movie yourName = new Movie("Your Name", "26/8/2016", Type.ORIGINAL, "Anime");
         movieRepository.save(yourName);
         Movie joker = new Movie("Joker", "31/8/2019", Type.ORIGINAL);
         movieRepository.save(joker);
@@ -86,8 +86,8 @@ public class DummyData implements CommandLineRunner {
         movieRepository.save(godzilla);
 
 //        Assign Categories to Movie
-        yourName.setCategories(new HashSet<Category>() {{ add(anime); }});
-        movieRepository.save(yourName);
+//        yourName.setCategories(new HashSet<Category>() {{ add(anime); }});
+//        movieRepository.save(yourName);
         joker.setCategories(new HashSet<Category>() {{add(drama); add(thriller);}});
         movieRepository.save(joker);
         kingKong.setCategories(new HashSet<Category>() {{ add(fanstasy); add(scifi); }});
