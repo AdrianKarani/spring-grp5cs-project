@@ -29,7 +29,7 @@ public class Movie {
     @Column(name = "movie_type")
     private Type type;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JsonIgnore
     @JoinTable(name = "movie_genres",
             joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
@@ -57,18 +57,18 @@ public class Movie {
     }
 
 //    With Category String
-    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, String categoryName) {
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, Category category) {
         this.name = name;
         this.releaseDate = releaseDate;
-        this.categories = new HashSet<Category>() {{ add(new Category(categoryName)); }};
+        this.categories = new HashSet<Category>() {{ add(category); }};
     }
 
 //    With Both Type and Category String
-    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, Type type, String categoryName) {
+    public Movie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate, Type type, Category category) {
         this.name = name;
         this.releaseDate = releaseDate;
         this.type = type;
-        this.categories = new HashSet<Category>() {{ add(new Category(categoryName)); }};
+        this.categories = new HashSet<Category>() {{ add(category); }};
     }
 
     public Long getId() {

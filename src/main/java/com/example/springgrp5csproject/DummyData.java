@@ -50,8 +50,8 @@ public class DummyData implements CommandLineRunner {
         categoryRepository.save(drama);
         Category cartoon = new Category("Cartoon");
         categoryRepository.save(cartoon);
-//        Category anime = new Category("Anime");
-//        categoryRepository.save(anime);
+        Category anime = new Category("Anime");
+        categoryRepository.save(anime);
 //        Types
 //        Type suggested = new Type("suggested");
 //        typeRepository.save(suggested);
@@ -76,21 +76,21 @@ public class DummyData implements CommandLineRunner {
         userRepository.save(angela);
 
 //        Movies
-        Movie yourName = new Movie("Your Name", "26/8/2016", Type.ORIGINAL, "Anime");
+        Movie yourName = new Movie("Your Name", "26/8/2016", Type.ORIGINAL, anime);
         movieRepository.save(yourName);
-        Movie joker = new Movie("Joker", "31/8/2019", Type.ORIGINAL);
+        Movie joker = new Movie("Joker", "31/8/2019", Type.ORIGINAL, drama);
         movieRepository.save(joker);
-        Movie kingKong = new Movie("Kong Skull Island", "28/2/2017", Type.ORIGINAL);
+        Movie kingKong = new Movie("Kong Skull Island", "28/2/2017", Type.ORIGINAL, fanstasy);
         movieRepository.save(kingKong);
-        Movie godzilla = new Movie("Godzilla: King of the Monsters", "13/5/2019", Type.ORIGINAL);
+        Movie godzilla = new Movie("Godzilla: King of the Monsters", "13/5/2019", Type.ORIGINAL, action);
         movieRepository.save(godzilla);
 
 //        Assign Categories to Movie
 //        yourName.setCategories(new HashSet<Category>() {{ add(anime); }});
 //        movieRepository.save(yourName);
-        joker.setCategories(new HashSet<Category>() {{add(drama); add(thriller);}});
+        joker.setCategories(new HashSet<Category>() {{ add(thriller); }});
         movieRepository.save(joker);
-        kingKong.setCategories(new HashSet<Category>() {{ add(fanstasy); add(scifi); }});
+        kingKong.setCategories(new HashSet<Category>() {{ add(scifi); }});
         movieRepository.save(kingKong);
     }
 }
