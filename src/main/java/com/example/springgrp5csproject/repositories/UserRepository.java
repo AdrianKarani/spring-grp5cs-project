@@ -11,4 +11,5 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllBySuggestedMoviesEquals(SuggestedMovie suggestedMovie);
     List<User> findAllByFavouriteMoviesEquals(Movie movie);
+    User findByIdNumberEquals(Long idNumber);
 }

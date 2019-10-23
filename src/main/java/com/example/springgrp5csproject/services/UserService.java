@@ -11,6 +11,7 @@ import java.util.Set;
 public interface UserService {
     List<User> findAll();
     User findById(Long id);
+    User findByIdNumber(Long idNumber);
     User createUser(User user);
 //    User updateUser(User user) throws Exception;
     User updateUser(Long id, User user) throws Exception;

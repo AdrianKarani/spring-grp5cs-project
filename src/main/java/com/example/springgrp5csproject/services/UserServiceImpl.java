@@ -34,7 +34,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("No User with ID: " + id + " found."));
     }
 
-//    User CRUD
+    @Override
+    public User findByIdNumber(Long idNumber) {
+        return userRepository.findByIdNumberEquals(idNumber);
+    }
+
+    //    User CRUD
     @Override
     public User createUser(User user) {
         user.setUserRole(UserRole.CUSTOMER);
@@ -140,7 +145,7 @@ public class UserServiceImpl implements UserService {
             SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);
             Movie movie = new Movie(suggestedMovie.getName(), suggestedMovie.getRelease_date(), Type.SUGGESTED);
             movie.setUserWhoSuggested(foundUser);
-            movieService.createMovie(movie);
+            movieService.createMovie(movie, foundUser.getIdNumber());
             System.out.println("The Following movie have been Approved to the Netflix Movie Catalogue.");
             System.out.println(movie.toString());
             return movie;

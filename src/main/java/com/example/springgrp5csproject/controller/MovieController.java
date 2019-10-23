@@ -28,25 +28,25 @@ public class MovieController {
 
 //    Create Original Movie by Netflix Administrator
     @PostMapping()
-    public Movie createOriginalMovie(@Validated(Movie.Create.class)@RequestBody Movie movie) throws Exception {
-        return movieService.createMovie(movie);
+    public Movie createOriginalMovie(@Validated(Movie.Create.class)@RequestBody Movie movie, @RequestParam Long idNumber) throws Exception {
+        return movieService.createMovie(movie, idNumber);
     }
 
 //    Update Movie by Netflix Admin
     @PatchMapping()
-    public Movie updateMovie(@Validated(Movie.Update.class)@RequestBody Movie movie) {
-        return movieService.updateMovie(movie);
+    public Movie updateMovie(@Validated(Movie.Update.class)@RequestBody Movie movie, @RequestParam Long idNumber) throws Exception {
+        return movieService.updateMovie(movie, idNumber);
     }
 
 //    Update Movie by Netflix Admin with an ID
     @PatchMapping(value = "{id}")
-    public Movie updateMovie(@PathVariable Long id, @Validated(Movie.Update.class)@RequestBody Movie movie) {
-        return movieService.updateMovie(id, movie);
+    public Movie updateMovie(@PathVariable Long id, @Validated(Movie.Update.class)@RequestBody Movie movie, @RequestParam Long idNumber) throws Exception {
+        return movieService.updateMovie(id, movie, idNumber);
     }
 
 //    Delete Movie
     @DeleteMapping(value = "{id}")
-    public void deleteMovie(@PathVariable Long id) { movieService.deleteMovie(id); }
+    public void deleteMovie(@PathVariable Long id, @RequestParam Long idNumber) throws Exception { movieService.deleteMovie(id, idNumber); }
 
 //    Use Category Id and Specific Type
     @GetMapping("available_movies/{categoryId}")

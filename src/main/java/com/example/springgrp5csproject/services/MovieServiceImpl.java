@@ -4,6 +4,7 @@ import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
+import com.example.springgrp5csproject.models.UserRole;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.Set;
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService) {
+    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService, UserService userService) {
         this.movieRepository = movieRepository;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @Override
@@ -49,7 +52,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie createMovie(Movie movie) throws Exception {
+    public Movie createMovie(Movie movie, Long idNumber) throws Exception {
+        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            throw new Exception("Unauthorized User");
+        }
         if (!movie.equals(movieRepository.findByNameEquals(movie.getName())) || !movie.equals(movieRepository.findByReleaseDateEquals(movie.getReleaseDate()))) {
             return movieRepository.save(movie);
         }
@@ -77,13 +83,19 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void deleteMovie(Long id) {
+    public void deleteMovie(Long id, Long idNumber) throws Exception {
+        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            throw new Exception("Unauthorized User");
+        }
         System.out.println("The Following Movie with ID: " + id + "is being Deleted.");
         movieRepository.deleteById(id);
     }
 
     @Override
-    public Movie updateMovie(Movie movie) {
+    public Movie updateMovie(Movie movie, Long idNumber) throws Exception {
+        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            throw new Exception("Unauthorized User");
+        }
         Movie foundMovie = findById(movie.getId());
         foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
@@ -93,7 +105,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie updateMovie(Long id, Movie movie) {
+    public Movie updateMovie(Long id, Movie movie, Long idNumber) throws Exception {
+        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            throw new Exception("Unauthorized User");
+        }
         Movie foundMovie = findById(id);
         foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());

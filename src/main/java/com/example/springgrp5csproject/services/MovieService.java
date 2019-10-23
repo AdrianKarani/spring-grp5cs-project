@@ -11,10 +11,10 @@ public interface MovieService {
 //    CRUD
     List<Movie> findAll();
     Movie findById(Long id);
-    void deleteMovie(Long id);
-    Movie createMovie(Movie movie) throws Exception;
-    Movie updateMovie(Movie movie);
-    Movie updateMovie(Long id, Movie movie);
+    void deleteMovie(Long id, Long idNumber) throws Exception;
+    Movie createMovie(Movie movie, Long idNumber) throws Exception;
+    Movie updateMovie(Movie movie, Long idNumber) throws Exception;
+    Movie updateMovie(Long id, Movie movie, Long idNumber) throws Exception;
 
 //    Complex
     Movie findByName(String movieName);
