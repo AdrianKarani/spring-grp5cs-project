@@ -17,6 +17,10 @@ public class User {
     private Long id;
 
     @NotNull(groups = Create.class)
+    @Column(name = "id_number", unique = true)
+    private Long idNumber;
+
+    @NotNull(groups = Create.class)
     @Column(name = "name")
     private String name;
 
@@ -41,8 +45,9 @@ public class User {
 
     private User() {}
 
-    public User(String name) {
+    public User(String name, Long idNumber) {
         this.name = name;
+        this.idNumber = idNumber;
     }
 
     public Long getId() {
@@ -51,6 +56,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(Long idNumber) {
+        this.idNumber = idNumber;
     }
 
     public String getName() {
@@ -109,6 +122,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                "ID Number=" + idNumber +
                 ", name='" + name + '\'' +
                 ", userRole=" + userRole +
                 ", favouriteMovies=" + favouriteMovies +

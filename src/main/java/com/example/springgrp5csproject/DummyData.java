@@ -59,19 +59,19 @@ public class DummyData implements CommandLineRunner {
 //        typeRepository.save(original);
 
 //        Users
-        User david = new User("David Kariuki");
+        User david = new User("David Kariuki", 91937L);
         david.setUserRole(UserRole.ADMINISTRATOR);
         userRepository.save(david);
-        User ian = new User("Ian Macharia");
+        User ian = new User("Ian Macharia", 94566L);
         ian.setUserRole(UserRole.CUSTOMER);
         userRepository.save(ian);
-        User adrian = new User("Adrian Karani");
+        User adrian = new User("Adrian Karani", 91181L);
         adrian.setUserRole(UserRole.CUSTOMER);
         userRepository.save(adrian);
-        User stan = new User("Stan Lee Lumumba");
+        User stan = new User("Stan Lee Lumumba", 91922L);
         stan.setUserRole(UserRole.CUSTOMER);
         userRepository.save(stan);
-        User angela = new User("Angela Too");
+        User angela = new User("Angela Too", 91179L);
         angela.setUserRole(UserRole.CUSTOMER);
         userRepository.save(angela);
 

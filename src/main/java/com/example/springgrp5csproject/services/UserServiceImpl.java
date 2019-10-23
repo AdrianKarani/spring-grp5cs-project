@@ -16,14 +16,12 @@ public class UserServiceImpl implements UserService {
     private final CategoryService categoryService;
     private final SuggestedMovieService suggestedMovieService;
     private final UserRepository userRepository;
-//    private final CategoryRepository categoryRepository;
 
     public UserServiceImpl(MovieService movieService, CategoryService categoryService, SuggestedMovieService suggestedMovieService, UserRepository userRepository) {
         this.movieService = movieService;
         this.categoryService = categoryService;
         this.suggestedMovieService = suggestedMovieService;
         this.userRepository = userRepository;
-//        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -36,32 +34,49 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("No User with ID: " + id + " found."));
     }
 
+//    User CRUD
     @Override
     public User createUser(User user) {
         user.setUserRole(UserRole.CUSTOMER);
         return userRepository.save(user);
     }
 
-    @Override
-    public User updateUser(User user) {
-        User foundUser = findById(user.getId());
-        foundUser.setName(user.getName());
-        return userRepository.save(foundUser);
-    }
+//    @Override
+//    public User updateUser(User user) throws Exception {
+//        User foundUser = findById(user.getId());
+//        if (!foundUser.getId().equals(user.getId())) {
+//            System.out.println("Unauthorized");
+//            throw new Exception("Unauthorized Access to a Different User");
+//        }
+//        System.out.println("Authorized");
+//        foundUser.setName(user.getName());
+//        return userRepository.save(foundUser);
+//    }
 
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, User user) throws Exception {
         User foundUser = findById(id);
+        if (!foundUser.getId().equals(user.getId())) {
+            System.out.println("Unauthorized");
+            throw new Exception("Unauthorized Access to a Different User");
+        }
+        System.out.println("Authorized");
         foundUser.setName(user.getName());
         return userRepository.save(foundUser);
+
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id, Long idNumber) throws Exception {
         System.out.println("The Following User with ID: " + id + "is being Deleted.");
+        User foundUser = findById(id);
+        if (!foundUser.getIdNumber().equals(idNumber)) {
+            throw new Exception("Unauthorized Access to a Different User");
+        }
         userRepository.deleteById(id);
     }
 
+//    Complex Suggestions and Favourites
     @Override
     public List<SuggestedMovie> suggestedMovies(Long id) {
         User foundUser = findById(id);
@@ -79,8 +94,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Movie addFavourite(Long customerId, String favouriteMovieName) {
         User foundUser = findById(customerId);
-        Movie foundMovie = movieService.getMovie(favouriteMovieName);
-        if (movieService.getMovie(favouriteMovieName) != null) {
+        Movie foundMovie = movieService.findByName(favouriteMovieName);
+        if (movieService.findByName(favouriteMovieName) != null) {
             foundUser.setFavouriteMovie(foundMovie);
         }
         userRepository.save(foundUser);
@@ -89,15 +104,15 @@ public class UserServiceImpl implements UserService {
         return foundMovie;
     }
 
-    @Override
-    public void addFavourites(Long customerId, Set<String> favouriteMovieNames) {
-        User foundUser = findById(customerId);
-        Set<Movie> foundMovies = movieService.getMovies(favouriteMovieNames);
-        foundUser.setFavouriteMovies(foundMovies);
-        userRepository.save(foundUser);
-        System.out.println("The Following movies have been added to Favourites.");
-        System.out.println(foundMovies.toString());
-    }
+//    @Override
+//    public void addFavourites(Long customerId, Set<String> favouriteMovieNames) {
+//        User foundUser = findById(customerId);
+//        Set<Movie> foundMovies = movieService.getMovies(favouriteMovieNames);
+//        foundUser.setFavouriteMovies(foundMovies);
+//        userRepository.save(foundUser);
+//        System.out.println("The Following movies have been added to Favourites.");
+//        System.out.println(foundMovies.toString());
+//    }
 
     @Override
     public SuggestedMovie suggestMovie(Long customerId, SuggestedMovie suggestedMovie) {
@@ -109,17 +124,17 @@ public class UserServiceImpl implements UserService {
         return suggestedMovie;
     }
 
-    @Override
-    public void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovies) {
-        User foundUser = findById(customerId);
-        foundUser.setSuggestedMovies(suggestedMovies);
-        userRepository.save(foundUser);
-        System.out.println("The Following movies have been Suggested.");
-        System.out.println(suggestedMovies.toString());
-    }
+//    @Override
+//    public void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovies) {
+//        User foundUser = findById(customerId);
+//        foundUser.setSuggestedMovies(suggestedMovies);
+//        userRepository.save(foundUser);
+//        System.out.println("The Following movies have been Suggested.");
+//        System.out.println(suggestedMovies.toString());
+//    }
 
     @Override
-    public Movie approveSuggestion(Long customerId, Long suggestedMovieId) {
+    public Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception {
         User foundUser = findById(customerId);
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
             SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);

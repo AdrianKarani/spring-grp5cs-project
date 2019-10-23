@@ -28,7 +28,7 @@ public class MovieController {
 
 //    Create Original Movie by Netflix Administrator
     @PostMapping()
-    public Movie createOriginalMovie(@Validated(Movie.Create.class)@RequestBody Movie movie) {
+    public Movie createOriginalMovie(@Validated(Movie.Create.class)@RequestBody Movie movie) throws Exception {
         return movieService.createMovie(movie);
     }
 
@@ -66,10 +66,10 @@ public class MovieController {
     }
 
 //    Get the Movie with the movie's name
-    @GetMapping("{movieName}")
-    public Movie getMovie(@PathVariable("movieName") String movieName) {
-        return movieService.getMovie(movieName);
-    }
+//    @GetMapping("{movieName}")
+//    public Movie getMovie(@PathVariable("movieName") String movieName) {
+//        return movieService.getMovie(movieName);
+//    }
 
 //    Get all Movies that have been Suggested
     @GetMapping("suggested_movies")

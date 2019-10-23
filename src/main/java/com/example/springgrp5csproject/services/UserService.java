@@ -12,16 +12,16 @@ public interface UserService {
     List<User> findAll();
     User findById(Long id);
     User createUser(User user);
-    User updateUser(User user);
-    User updateUser(Long id, User user);
-    void deleteUser(Long id);
+//    User updateUser(User user) throws Exception;
+    User updateUser(Long id, User user) throws Exception;
+    void deleteUser(Long id, Long userNumber) throws Exception;
     List<SuggestedMovie> suggestedMovies(Long id);
     List<Movie> favouriteMovies(Long id);
     Movie addFavourite(Long customerId, String favouriteMovieName);
-    void addFavourites(Long customerId, Set<String> favouriteMovieNames);
+//    void addFavourites(Long customerId, Set<String> favouriteMovieNames);
     SuggestedMovie suggestMovie(Long customerId, SuggestedMovie suggestedMovie);
-    void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovie);
-    Movie approveSuggestion(Long customerId, Long suggestedMovieId);
+//    void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovie);
+    Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception;
 
 //    Category CRUD
     public Category createCategory(Long id, Category category) throws Exception;

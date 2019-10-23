@@ -28,6 +28,12 @@ public class UserController {
         return userService.findAll();
     }
 
+//    View One User
+    @GetMapping("{id}")
+    public User findUser(@PathVariable("id")Long id) {
+        return userService.findById(id);
+    }
+
 //    Register a User
     @PostMapping()
     public User createUser(@Validated(User.Create.class)@RequestBody User user) {
@@ -35,21 +41,21 @@ public class UserController {
     }
 
 //    Update User
-    @PatchMapping()
-    public User updateUser(@Validated(User.Update.class)@RequestBody User user) {
-        return userService.updateUser(user);
-    }
+//    @PatchMapping()
+//    public User updateUser(@Validated(User.Update.class)@RequestBody User user) throws Exception {
+//        return userService.updateUser(user);
+//    }
 
 //    Update User with ID
     @PatchMapping(value = "{id}")
-    public User updateUser(@PathVariable("id") Long id, @Validated(User.Update.class) @RequestBody User user) {
-        return userService.updateUser(user);
+    public User updateUser(@PathVariable("id") Long id, @Validated(User.Update.class) @RequestBody User user) throws Exception {
+        return userService.updateUser(id, user);
     }
 
-    //    Delete Account
-    @DeleteMapping(value = "{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+//    Delete Account
+    @DeleteMapping(value = "{id}/idNumber/{idNumber}")
+    public void deleteUser(@PathVariable Long id, @PathVariable Long idNumber) throws Exception {
+        userService.deleteUser(id, idNumber);
     }
 
 //    User can suggest a Movie to Netflix
@@ -114,7 +120,7 @@ public class UserController {
 
 //    Approve Suggested Movie
     @PostMapping("{id}/suggested_movies/{suggested_movie_id}")
-    public Movie approveSuggestion(@PathVariable("id") Long customerId, @PathVariable("suggested_movie_id") Long suggested_movie_id) {
+    public Movie approveSuggestion(@PathVariable("id") Long customerId, @PathVariable("suggested_movie_id") Long suggested_movie_id) throws Exception {
         return userService.approveSuggestion(customerId, suggested_movie_id);
     }
 }
