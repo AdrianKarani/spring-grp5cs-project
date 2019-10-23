@@ -22,6 +22,7 @@ public class UserController {
         this.categoryService = categoryService;
     }
 
+//    User CRUD
 //    Find All Users
     @GetMapping
     public List<User> findAll() {
@@ -58,29 +59,31 @@ public class UserController {
         userService.deleteUser(id, idNumber);
     }
 
-//    User can suggest a Movie to Netflix
-    @PostMapping("{id}/movie_suggestion")
-    public SuggestedMovie suggestMovie(@PathVariable("id") Long customerId, @RequestBody SuggestedMovie movie) {
-        return userService.suggestMovie(customerId, movie);
+
+//    Movies
+//    User can either suggest a Movie to Netflix if a normal Customer, or create a Movie, if they are an Admin
+    @PostMapping("{id}/movies")
+    public Movie postMovie(@PathVariable("id") Long customerId, @RequestBody SuggestedMovie suggestedMovie) throws Exception {
+        return userService.postMovie(customerId, suggestedMovie);
     }
 
-//    TODO: User can suggest Movies to Netflix
-//    @PostMapping("{id}/movie_suggestions")
-//    public Set<SuggestedMovie> suggestMovies(@PathVariable("id") Long customerId, @RequestBody Set<SuggestedMovie> suggestedMovies) {
-//        return userService.suggestMovies(customerId, suggestedMovies);
-//    }
+    //    Update Movie by Netflix Admin with an ID
+    @PatchMapping(value = "{userId}/movies/{movieId}")
+    public Movie updateMovie(@PathVariable Long userId, @Validated(Movie.Update.class)@RequestBody Movie movie, @PathVariable Long movieId) throws Exception {
+        return userService.updateMovie(userId, movie, movieId);
+    }
 
+    //    Delete Movie
+    @DeleteMapping(value = "{userId}/movies/{movieId}")
+    public void deleteMovie(@PathVariable Long userId, @PathVariable Long movieId) throws Exception { userService.deleteMovie(userId, movieId); }
+
+
+//    Complex Operations
 //    User adds a movie to Favourites list
     @PostMapping("{id}/movie_favourite")
-    public Movie addFavourite(@PathVariable("id") Long customerId, @RequestBody String movieName) {
-        return userService.addFavourite(customerId, movieName);
+    public Movie addFavourite(@PathVariable("id") Long customerId, @RequestParam Long movieId) throws Exception {
+        return userService.addFavourite(customerId, movieId);
     }
-
-//    TODO: User adds movies to Favourites list
-//    @PostMapping("{id}/movie_favourites")
-//    public void addFavourite(@PathVariable("id") Long customerId, @RequestBody Set<String> movieNames) {
-//        userService.addFavourites(customerId, movieNames);
-//    }
 
 //    List all Movies that User has Suggested
     @GetMapping("{id}/suggested_movies")

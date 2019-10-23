@@ -17,12 +17,10 @@ import java.util.Set;
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final CategoryService categoryService;
-    private final UserService userService;
 
-    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService, UserService userService) {
+    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService) {
         this.movieRepository = movieRepository;
         this.categoryService = categoryService;
-        this.userService = userService;
     }
 
     @Override
@@ -52,10 +50,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie createMovie(Movie movie, Long idNumber) throws Exception {
-        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            throw new Exception("Unauthorized User");
-        }
+    public Movie createMovie(Movie movie) throws Exception {
         if (!movie.equals(movieRepository.findByNameEquals(movie.getName())) || !movie.equals(movieRepository.findByReleaseDateEquals(movie.getReleaseDate()))) {
             return movieRepository.save(movie);
         }
@@ -83,32 +78,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public void deleteMovie(Long id, Long idNumber) throws Exception {
-        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            throw new Exception("Unauthorized User");
-        }
+    public void deleteMovie(Long id) {
         System.out.println("The Following Movie with ID: " + id + "is being Deleted.");
         movieRepository.deleteById(id);
     }
 
     @Override
-    public Movie updateMovie(Movie movie, Long idNumber) throws Exception {
-        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            throw new Exception("Unauthorized User");
-        }
-        Movie foundMovie = findById(movie.getId());
-        foundMovie.setCategories(movie.getCategories());
-        foundMovie.setName(movie.getName());
-        foundMovie.setType(movie.getType());
-        foundMovie.setReleaseDate(movie.getReleaseDate());
-        return movieRepository.save(foundMovie);
-    }
-
-    @Override
-    public Movie updateMovie(Long id, Movie movie, Long idNumber) throws Exception {
-        if (!userService.findByIdNumber(idNumber).getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            throw new Exception("Unauthorized User");
-        }
+    public Movie updateMovie(Long id, Movie movie) {
+        System.out.println("The Following Movie with ID: " + id + "is being Updated.");
         Movie foundMovie = findById(id);
         foundMovie.setCategories(movie.getCategories());
         foundMovie.setName(movie.getName());
@@ -118,27 +95,15 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> availableMovies(String typeString, Long categoryId) {
-//        System.out.println("The Type: " + typeString);
-//        System.out.println("The Expected Type: " + Type.ORIGINAL.name());
+    public List<Movie> availableMovies(String typeString, Long categoryId) throws Exception {
         if (typeString.equals(Type.ORIGINAL.name())) {
             System.out.println("Netflix Original");
         } else if (typeString.equals(Type.SUGGESTED.name())) {
             System.out.println("User Suggested.");
         } else {
-            System.out.println("Not on Catalogue");
+            throw new Exception("Not on Catalogue.");
         }
-//        if (!typeString.equals(Type.ORIGINAL.name())) {
-//            throw new Exception("Please Use ALL CAPS");
-//        } else if (!typeString.equals(Type.SUGGESTED.name())) {
-//            throw new Exception("Please Use ALL CAPS");
-//        } else {
-//
-//        }
         Type type = Type.valueOf(typeString);
-//        System.out.println("The Type: " + type.name());
-//        Category category = categoryService.findById(categoryId);
-//        System.out.println("The Category: " + category.toString());
         return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));
     }
 

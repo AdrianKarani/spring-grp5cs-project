@@ -84,4 +84,11 @@ public class SuggestedMovie {
                 ", release_date='" + release_date + '\'' +
                 '}';
     }
+
+    public Movie toMovie() {
+        Movie movie = new Movie(name, release_date);
+        movie.setId(id);
+        movie.setUsersWhoSuggested(usersWhoSuggested);
+        return movie;
+    }
 }

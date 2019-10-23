@@ -11,10 +11,10 @@ public interface MovieService {
 //    CRUD
     List<Movie> findAll();
     Movie findById(Long id);
-    void deleteMovie(Long id, Long idNumber) throws Exception;
-    Movie createMovie(Movie movie, Long idNumber) throws Exception;
-    Movie updateMovie(Movie movie, Long idNumber) throws Exception;
-    Movie updateMovie(Long id, Movie movie, Long idNumber) throws Exception;
+    void deleteMovie(Long id) throws Exception;
+    Movie createMovie(Movie movie) throws Exception;
+//    Movie updateMovie(Movie movie, Long idNumber) throws Exception;
+    Movie updateMovie(Long id, Movie movie) throws Exception;
 
 //    Complex
     Movie findByName(String movieName);
@@ -23,7 +23,7 @@ public interface MovieService {
     String getReleaseDate(String movieName);
     List<Movie> likedMovies();
     List<Movie> suggestedMovies();
-    List<Movie> availableMovies(String type, Long categoryId);
+    List<Movie> availableMovies(String type, Long categoryId) throws Exception;
     List<User> usersWhoLiked(Long movieId);
     List<User> usersWhoSuggested(Long movieId);
 }

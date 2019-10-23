@@ -9,19 +9,22 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService {
+//    Simple CRUD
     List<User> findAll();
     User findById(Long id);
     User findByIdNumber(Long idNumber);
     User createUser(User user);
-//    User updateUser(User user) throws Exception;
     User updateUser(Long id, User user) throws Exception;
     void deleteUser(Long id, Long userNumber) throws Exception;
+
+//    Complex Operations
     List<SuggestedMovie> suggestedMovies(Long id);
     List<Movie> favouriteMovies(Long id);
-    Movie addFavourite(Long customerId, String favouriteMovieName);
-//    void addFavourites(Long customerId, Set<String> favouriteMovieNames);
-    SuggestedMovie suggestMovie(Long customerId, SuggestedMovie suggestedMovie);
-//    void suggestMovies(Long customerId, Set<SuggestedMovie> suggestedMovie);
+    Movie addFavourite(Long customerId, Long favouriteMovieId) throws Exception;
+//    Movie CRUD
+    Movie postMovie(Long customerId, SuggestedMovie suggestedMovie) throws Exception;
+    Movie updateMovie(Long customerId, Movie movie, Long movieId) throws Exception;
+    void deleteMovie(Long customerId, Long movieId) throws Exception;
     Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception;
 
 //    Category CRUD

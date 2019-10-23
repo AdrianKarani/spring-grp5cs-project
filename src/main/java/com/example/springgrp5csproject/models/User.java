@@ -111,6 +111,7 @@ public class User {
     }
 
     public void setSuggestedMovie(SuggestedMovie suggestedMovie) {
+
         this.suggestedMovies.add(suggestedMovie);
     }
 
