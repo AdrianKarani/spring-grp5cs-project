@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id, Long idNumber) throws Exception {
-        System.out.println("The Following User with ID: " + id + "is being Deleted.");
+        System.out.println("The Following User with ID: " + id + " is being Deleted.");
         User foundUser = findById(id);
         if (!foundUser.getIdNumber().equals(idNumber)) {
             throw new Exception("Unauthorized Access to a Different User");
@@ -101,7 +101,12 @@ public class UserServiceImpl implements UserService {
     public Movie postMovie(Long customerId, SuggestedMovie suggestedMovie) throws Exception {
         User foundUser = findById(customerId);
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            movieService.createMovie(suggestedMovie.toMovie());
+            Movie movie = suggestedMovie.toMovie();
+            movie.setType(Type.ORIGINAL);
+            movie.setReleaseDate(suggestedMovie.getReleaseDate());
+            System.out.println("The Following movie is being Suggested.");
+            System.out.println(suggestedMovie.toString());
+            return movieService.createMovie(movie);
         } else if (foundUser.getUserRole().equals(UserRole.CUSTOMER)) {
             foundUser.setSuggestedMovie(suggestedMovie);
             userRepository.save(foundUser);
@@ -128,7 +133,9 @@ public class UserServiceImpl implements UserService {
     public Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception {
         validateUserRole(findById(customerId));
         SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);
-        Movie movie = new Movie(suggestedMovie.getName(), suggestedMovie.getRelease_date(), Type.SUGGESTED);
+//        Movie movie = new Movie(suggestedMovie.getName(), suggestedMovie.getReleaseDate(), Type.SUGGESTED);
+        Movie movie = suggestedMovie.toMovie();
+        movie.setUsersWhoSuggested(suggestedMovie.getUsersWhoSuggested());
         movieService.createMovie(movie);
         System.out.println("The Following movie have been Approved to the Netflix Movie Catalogue.");
         System.out.println(movie.toString());

@@ -41,12 +41,6 @@ public class UserController {
         return userService.createUser(user);
     }
 
-//    Update User
-//    @PatchMapping()
-//    public User updateUser(@Validated(User.Update.class)@RequestBody User user) throws Exception {
-//        return userService.updateUser(user);
-//    }
-
 //    Update User with ID
     @PatchMapping(value = "{id}")
     public User updateUser(@PathVariable("id") Long id, @Validated(User.Update.class) @RequestBody User user) throws Exception {
@@ -79,20 +73,20 @@ public class UserController {
 
 
 //    Complex Operations
-//    User adds a movie to Favourites list
-    @PostMapping("{id}/movie_favourite")
+//    User adds a movie to Liked/Favourite list of movies
+    @PostMapping("{id}/movies/like")
     public Movie addFavourite(@PathVariable("id") Long customerId, @RequestParam Long movieId) throws Exception {
         return userService.addFavourite(customerId, movieId);
     }
 
 //    List all Movies that User has Suggested
-    @GetMapping("{id}/suggested_movies")
+    @GetMapping("{id}/movies/suggested")
     public List<SuggestedMovie> getSuggestedMovies(@PathVariable("id") Long customerId) {
         return userService.suggestedMovies(customerId);
     }
 
 //    List User's Favourite Movies
-    @GetMapping("{id}/favourite_movies")
+    @GetMapping("{id}/movies/liked")
     public List<Movie> getFavouriteMovies(@PathVariable("id") Long customerId) {
         return userService.favouriteMovies(customerId);
     }
@@ -108,12 +102,6 @@ public class UserController {
     public void deleteCategory(@PathVariable("id") Long id, @PathVariable("categoryId") Long categoryId) throws Exception {
         userService.deleteCategory(id, categoryId);
     }
-    
-//    Update a Category
-    @PatchMapping("{id}/category")
-    public Category updateCategory(@PathVariable("id") Long id, @RequestBody Category category) throws Exception {
-        return userService.updateCategory(id, category);
-    }
 
 //    Update Category with ID
     @PatchMapping("{id}/category/{categoryId}")
@@ -122,8 +110,8 @@ public class UserController {
     }
 
 //    Approve Suggested Movie
-    @PostMapping("{id}/suggested_movies/{suggested_movie_id}")
-    public Movie approveSuggestion(@PathVariable("id") Long customerId, @PathVariable("suggested_movie_id") Long suggested_movie_id) throws Exception {
-        return userService.approveSuggestion(customerId, suggested_movie_id);
+    @PostMapping("{id}/movies/suggested/{movie_id}")
+    public Movie approveSuggestion(@PathVariable("id") Long customerId, @PathVariable("movie_id") Long movieId) throws Exception {
+        return userService.approveSuggestion(customerId, movieId);
     }
 }

@@ -2,9 +2,9 @@ package com.example.springgrp5csproject.services;
 
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
+import com.example.springgrp5csproject.models.SuggestedMovie;
 import com.example.springgrp5csproject.models.Type;
 import com.example.springgrp5csproject.models.User;
-import com.example.springgrp5csproject.models.UserRole;
 import com.example.springgrp5csproject.repositories.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,12 @@ import java.util.Set;
 @Service
 public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
+    private final SuggestedMovieService suggestedMovieService;
     private final CategoryService categoryService;
 
-    public MovieServiceImpl(MovieRepository movieRepository, CategoryService categoryService) {
+    public MovieServiceImpl(MovieRepository movieRepository, SuggestedMovieService suggestedMovieService, CategoryService categoryService) {
         this.movieRepository = movieRepository;
+        this.suggestedMovieService = suggestedMovieService;
         this.categoryService = categoryService;
     }
 
@@ -34,8 +36,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public String getReleaseDate(String movieName) {
-        Movie foundMovie = movieRepository.findByNameEquals(movieName);
+    public String getReleaseDate(Long movieId) {
+        Movie foundMovie = findById(movieId);
         return foundMovie.getReleaseDate();
     }
 
@@ -45,8 +47,22 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> suggestedMovies() {
-        return movieRepository.findAllByUsersWhoSuggestedIsNotNull();
+    public List<Movie> suggestedMovies() throws Exception {
+        System.out.println("Finding the List of Suggested Movies.");
+        int i = 0;
+        List<Movie> movies = null;
+        List<SuggestedMovie> suggestedMovies = suggestedMovieService.findAllSuggestedMovies();
+        System.out.println("List of Suggested Movie: ");
+        while (i < suggestedMovies.size()) {
+            Movie movie = suggestedMovies.get(i).toMovie();
+            System.out.println(movie);
+            movies = new ArrayList<Movie> () {{ add(movie); }};
+            i++;
+        }
+        if (movies == null) {
+            throw new Exception("No Suggested Movies");
+        }
+        return movies;
     }
 
     @Override
@@ -79,17 +95,20 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
-        System.out.println("The Following Movie with ID: " + id + "is being Deleted.");
+        System.out.println("The Following Movie with ID: " + id + " is being Deleted.");
         movieRepository.deleteById(id);
     }
 
     @Override
     public Movie updateMovie(Long id, Movie movie) {
-        System.out.println("The Following Movie with ID: " + id + "is being Updated.");
+        System.out.println("The Following Movie with ID: " + id + " is being Updated.");
         Movie foundMovie = findById(id);
-        foundMovie.setCategories(movie.getCategories());
+        if (movie.getCategories() != null) {
+            foundMovie.setCategories(movie.getCategories());
+        } else if (movie.getType() != null) {
+            foundMovie.setType(movie.getType());
+        }
         foundMovie.setName(movie.getName());
-        foundMovie.setType(movie.getType());
         foundMovie.setReleaseDate(movie.getReleaseDate());
         return movieRepository.save(foundMovie);
     }
@@ -115,7 +134,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<User> usersWhoSuggested(Long movieId) {
-        Movie foundMovie = findById(movieId);
-        return new ArrayList<>(foundMovie.getUsersWhoSuggested());
+        SuggestedMovie foundSuggestedMovie = suggestedMovieService.findById(movieId);
+//        Movie foundMovie = findById(movieId);
+        return new ArrayList<>(foundSuggestedMovie.getUsersWhoSuggested());
     }
 }

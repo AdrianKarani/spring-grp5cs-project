@@ -16,6 +16,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+//    List All Categories
     @GetMapping
     public List<Category> getAll() {
         return categoryService.findAll();
@@ -26,9 +27,4 @@ public class CategoryController {
     public Category getCategory(@PathVariable("id")Long id) {
         return categoryService.findById(id);
     }
-
-//    @PostMapping()
-//    public Category createCategory(@RequestParam Long id, @RequestBody Category category) throws Exception {
-//        return categoryService.createCategory(id, category);
-//    }
 }

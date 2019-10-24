@@ -20,9 +20,9 @@ public interface MovieService {
     Movie findByName(String movieName);
     Movie findByReleaseDate(String releaseDate);
     Set<Movie> findByName(Set<String> movieNames);
-    String getReleaseDate(String movieName);
+    String getReleaseDate(Long movieId);
     List<Movie> likedMovies();
-    List<Movie> suggestedMovies();
+    List<Movie> suggestedMovies() throws Exception;
     List<Movie> availableMovies(String type, Long categoryId) throws Exception;
     List<User> usersWhoLiked(Long movieId);
     List<User> usersWhoSuggested(Long movieId);

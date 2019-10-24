@@ -20,16 +20,16 @@ public class SuggestedMovie {
 
     @NotNull(groups = Create.class)
     @Column(name = "release_date")
-    private String release_date;
+    private String releaseDate;
 
     @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.ALL})
     private Set<User> usersWhoSuggested;
 
     private SuggestedMovie() {}
 
-    public SuggestedMovie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String release_date) {
+    public SuggestedMovie(@NotNull(groups = Create.class) String name, @NotNull(groups = Create.class) String releaseDate) {
         this.name = name;
-        this.release_date = release_date;
+        this.releaseDate = releaseDate;
     }
 
     public Long getId() {
@@ -48,12 +48,12 @@ public class SuggestedMovie {
         this.name = name;
     }
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public void setUserWhoSuggested(User usersWhoSuggested) {
@@ -81,13 +81,14 @@ public class SuggestedMovie {
         return "Suggested Movie{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", release_date='" + release_date + '\'' +
+                ", release_date='" + releaseDate + '\'' +
                 '}';
     }
 
     public Movie toMovie() {
-        Movie movie = new Movie(name, release_date);
+        Movie movie = new Movie(name, releaseDate);
         movie.setId(id);
+        movie.setType(Type.SUGGESTED);
         movie.setUsersWhoSuggested(usersWhoSuggested);
         return movie;
     }
