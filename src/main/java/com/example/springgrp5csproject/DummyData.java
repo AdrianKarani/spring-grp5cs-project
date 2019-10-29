@@ -10,22 +10,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 
-@Component
+//@Component
 public class DummyData implements CommandLineRunner {
-//    private final TypeRepository typeRepository;
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
     private final CategoryRepository categoryRepository;
 
-//    public DummyData(TypeRepository typeRepository, UserRepository userRepository, MovieRepository movieRepository, CategoryRepository categoryRepository) {
-//        this.typeRepository = typeRepository;
-//        this.userRepository = userRepository;
-//        this.movieRepository = movieRepository;
-//        this.categoryRepository = categoryRepository;
-//    }
-
     public DummyData(UserRepository userRepository, MovieRepository movieRepository, CategoryRepository categoryRepository) {
-//        this.typeRepository = typeRepository;
         this.userRepository = userRepository;
         this.movieRepository = movieRepository;
         this.categoryRepository = categoryRepository;

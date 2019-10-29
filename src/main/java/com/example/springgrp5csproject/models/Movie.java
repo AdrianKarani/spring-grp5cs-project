@@ -167,9 +167,15 @@ public class Movie {
         return "Movie{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", release_date='" + releaseDate + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
                 ", type=" + type +
                 ", categories=" + categories +
+                ", usersWhoLiked=" + usersWhoLiked +
+                ", usersWhoSuggested=" + usersWhoSuggested +
                 '}';
+    }
+
+    public SuggestedMovie toSuggestedMovie() {
+        return new SuggestedMovie(name, releaseDate);
     }
 }

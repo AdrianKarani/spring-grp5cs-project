@@ -98,21 +98,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Movie postMovie(Long customerId, SuggestedMovie suggestedMovie) throws Exception {
+    public Movie postMovie(Long customerId, Movie movie) throws Exception {
         User foundUser = findById(customerId);
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-            Movie movie = suggestedMovie.toMovie();
+//            Movie movie = suggestedMovie.toMovie();
             movie.setType(Type.ORIGINAL);
-            movie.setReleaseDate(suggestedMovie.getReleaseDate());
+//            movie.setReleaseDate(suggestedMovie.getReleaseDate());
             System.out.println("The Following movie is being Suggested.");
-            System.out.println(suggestedMovie.toString());
+            System.out.println(movie.toString());
             return movieService.createMovie(movie);
         } else if (foundUser.getUserRole().equals(UserRole.CUSTOMER)) {
-            foundUser.setSuggestedMovie(suggestedMovie);
+            foundUser.setSuggestedMovie(movie.toSuggestedMovie());
             userRepository.save(foundUser);
             System.out.println("The Following movie has been Suggested.");
-            System.out.println(suggestedMovie.toString());
-            return suggestedMovie.toMovie();
+            System.out.println(movie.toString());
+            return movie;
         }
         throw new Exception("No Such User");
     }

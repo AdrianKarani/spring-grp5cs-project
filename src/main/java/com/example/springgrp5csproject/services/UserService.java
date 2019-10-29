@@ -22,7 +22,7 @@ public interface UserService {
     List<Movie> favouriteMovies(Long id);
     Movie addFavourite(Long customerId, Long favouriteMovieId) throws Exception;
 //    Movie CRUD
-    Movie postMovie(Long customerId, SuggestedMovie suggestedMovie) throws Exception;
+    Movie postMovie(Long customerId, Movie movie) throws Exception;
     Movie updateMovie(Long customerId, Movie movie, Long movieId) throws Exception;
     void deleteMovie(Long customerId, Long movieId) throws Exception;
     Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception;

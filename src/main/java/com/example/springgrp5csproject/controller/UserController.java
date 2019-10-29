@@ -49,7 +49,7 @@ public class UserController {
 
 //    Delete Account
     @DeleteMapping(value = "{id}/idNumber/{idNumber}")
-    public void deleteUser(@PathVariable Long id, @PathVariable Long idNumber) throws Exception {
+    public void deleteUser(@PathVariable(name = "id") Long id, @PathVariable(name = "idNumber") Long idNumber) throws Exception {
         userService.deleteUser(id, idNumber);
     }
 
@@ -57,61 +57,61 @@ public class UserController {
 //    Movies
 //    User can either suggest a Movie to Netflix if a normal Customer, or create a Movie, if they are an Admin
     @PostMapping("{id}/movies")
-    public Movie postMovie(@PathVariable("id") Long customerId, @RequestBody SuggestedMovie suggestedMovie) throws Exception {
-        return userService.postMovie(customerId, suggestedMovie);
+    public Movie postMovie(@PathVariable(name = "id") Long id, @RequestBody Movie movie) throws Exception {
+        return userService.postMovie(id, movie);
     }
 
     //    Update Movie by Netflix Admin with an ID
-    @PatchMapping(value = "{userId}/movies/{movieId}")
-    public Movie updateMovie(@PathVariable Long userId, @Validated(Movie.Update.class)@RequestBody Movie movie, @PathVariable Long movieId) throws Exception {
-        return userService.updateMovie(userId, movie, movieId);
+    @PatchMapping(value = "{id}/movies/{movieId}")
+    public Movie updateMovie(@PathVariable(name = "id") Long id, @Validated(Movie.Update.class)@RequestBody Movie movie, @PathVariable Long movieId) throws Exception {
+        return userService.updateMovie(id, movie, movieId);
     }
 
     //    Delete Movie
-    @DeleteMapping(value = "{userId}/movies/{movieId}")
-    public void deleteMovie(@PathVariable Long userId, @PathVariable Long movieId) throws Exception { userService.deleteMovie(userId, movieId); }
+    @DeleteMapping(value = "{id}/movies/{movieId}")
+    public void deleteMovie(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws Exception { userService.deleteMovie(id, movieId); }
 
 
 //    Complex Operations
 //    User adds a movie to Liked/Favourite list of movies
     @PostMapping("{id}/movies/like")
-    public Movie addFavourite(@PathVariable("id") Long customerId, @RequestParam Long movieId) throws Exception {
-        return userService.addFavourite(customerId, movieId);
+    public Movie addFavourite(@PathVariable("id") Long id, @RequestParam(name = "movieId") Long movieId) throws Exception {
+        return userService.addFavourite(id, movieId);
     }
 
 //    List all Movies that User has Suggested
     @GetMapping("{id}/movies/suggested")
-    public List<SuggestedMovie> getSuggestedMovies(@PathVariable("id") Long customerId) {
-        return userService.suggestedMovies(customerId);
+    public List<SuggestedMovie> getSuggestedMovies(@PathVariable(name = "id") Long id) {
+        return userService.suggestedMovies(id);
     }
 
 //    List User's Favourite Movies
     @GetMapping("{id}/movies/liked")
-    public List<Movie> getFavouriteMovies(@PathVariable("id") Long customerId) {
-        return userService.favouriteMovies(customerId);
+    public List<Movie> getFavouriteMovies(@PathVariable(name = "id") Long id) {
+        return userService.favouriteMovies(id);
     }
 
 //    Create a Category
     @PostMapping("{id}/category")
-    public Category createCategory(@PathVariable("id") Long id, @RequestBody Category category) throws Exception {
+    public Category createCategory(@PathVariable(name = "id") Long id, @RequestBody Category category) throws Exception {
         return userService.createCategory(id, category);
     }
 
 //    Delete a Category
     @DeleteMapping("{id}/category/{categoryId}")
-    public void deleteCategory(@PathVariable("id") Long id, @PathVariable("categoryId") Long categoryId) throws Exception {
+    public void deleteCategory(@PathVariable(name = "id") Long id, @PathVariable(name = "categoryId") Long categoryId) throws Exception {
         userService.deleteCategory(id, categoryId);
     }
 
 //    Update Category with ID
     @PatchMapping("{id}/category/{categoryId}")
-    public Category updateCategory(@PathVariable("id") Long id, @RequestBody Category category, @PathVariable("categoryId") Long categoryId) throws Exception {
+    public Category updateCategory(@PathVariable(name = "id") Long id, @RequestBody Category category, @PathVariable(name = "categoryId") Long categoryId) throws Exception {
         return userService.updateCategory(id, category, categoryId);
     }
 
 //    Approve Suggested Movie
-    @PostMapping("{id}/movies/suggested/{movie_id}")
-    public Movie approveSuggestion(@PathVariable("id") Long customerId, @PathVariable("movie_id") Long movieId) throws Exception {
-        return userService.approveSuggestion(customerId, movieId);
+    @PostMapping("{id}/movies/suggested/{movieId}")
+    public Movie approveSuggestion(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws Exception {
+        return userService.approveSuggestion(id, movieId);
     }
 }
