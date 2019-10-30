@@ -14,7 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     Movie findByReleaseDateEquals(String releaseDate);
     List<Movie> findMoviesByTypeEquals(Type type);
     List<Movie> findAllByUsersWhoLikedIsNotNull();
-    List<Movie> findAllByUsersWhoSuggestedIsNotNull();
+    List<Movie> findAllByTypeEquals(Type type);
     List<Movie> findAllByUsersWhoLikedEquals(User user);
     List<Movie> findAllByUsersWhoSuggestedEquals(User user);
     Movie findByTypeEqualsAndCategoriesEquals(Type type, Category category);

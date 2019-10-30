@@ -36,10 +36,10 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<Category> categories;
 
-    @ManyToMany(mappedBy = "favouriteMovies", cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "favouriteMovies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<User> usersWhoLiked;
 
-    @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<User> usersWhoSuggested;
 
     private Movie() {}
@@ -164,14 +164,12 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", releaseDate='" + releaseDate + '\'' +
-                ", type=" + type +
-                ", categories=" + categories +
-                ", usersWhoLiked=" + usersWhoLiked +
-                ", usersWhoSuggested=" + usersWhoSuggested +
+        return "Movie { " +
+                "id = " + id +
+                ", name = '" + name + '\'' +
+                ", releaseDate = '" + releaseDate + '\'' +
+                ", type = " + type +
+                ", categories = " + categories +
                 '}';
     }
 

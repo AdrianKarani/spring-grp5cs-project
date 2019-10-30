@@ -121,13 +121,13 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                "ID Number=" + idNumber +
-                ", name='" + name + '\'' +
-                ", userRole=" + userRole +
-                ", favouriteMovies=" + favouriteMovies +
-                ", suggestedMovies=" + suggestedMovies +
+        return "User { " +
+                "id = " + id +
+                "ID Number = " + idNumber +
+                ", name = '" + name + '\'' +
+                ", userRole = " + userRole +
+                ", favouriteMovies = " + favouriteMovies +
+                ", suggestedMovies = " + suggestedMovies +
                 '}';
     }
 }

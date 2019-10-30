@@ -1,5 +1,6 @@
 package com.example.springgrp5csproject.services;
 
+import com.example.springgrp5csproject.exception.EntityConflictException;
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.SuggestedMovie;
@@ -48,15 +49,15 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public List<Movie> suggestedMovies() throws Exception {
-        System.out.println("Finding the List of Suggested Movies.");
+        System.out.println("Finding the List of Pending Suggested Movies.");
         int i = 0;
-        List<Movie> movies = null;
+        List<Movie> movies = new ArrayList<Movie>();
         List<SuggestedMovie> suggestedMovies = suggestedMovieService.findAllSuggestedMovies();
         System.out.println("List of Suggested Movie: ");
         while (i < suggestedMovies.size()) {
             Movie movie = suggestedMovies.get(i).toMovie();
             System.out.println(movie);
-            movies = new ArrayList<Movie> () {{ add(movie); }};
+            movies.add(movie);
             i++;
         }
         if (movies == null) {
@@ -66,11 +67,27 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Movie createMovie(Movie movie) throws Exception {
+    public List<Movie> approvedSuggestedMovies() throws Exception {
+        System.out.println("Finding the List of Approved Suggested Movies.");
+        int i = 0;
+        List<Movie> movies = movieRepository.findAllByTypeEquals(Type.SUGGESTED);
+        List<Movie> approvedMovies = new ArrayList<Movie>();
+        System.out.println("List of Approved Suggested Movie: ");
+        while (i != movies.size()) {
+            Movie movie = movies.get(i);
+            System.out.println(movie);
+            approvedMovies.add(movie);
+            i++;
+        }
+        return movies;
+    }
+
+    @Override
+    public Movie createMovie(Movie movie) throws EntityConflictException {
         if (!movie.equals(movieRepository.findByNameEquals(movie.getName())) || !movie.equals(movieRepository.findByReleaseDateEquals(movie.getReleaseDate()))) {
             return movieRepository.save(movie);
         }
-        throw new Exception("Movie already Exists.");
+        throw new EntityConflictException("Movie already Exists.");
     }
 
     @Override
@@ -95,14 +112,18 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public void deleteMovie(Long id) {
+        if (findById(id) == null) {
+            throw new NotFoundException("No Such Movie with ID: " + id);
+        }
         System.out.println("The Following Movie with ID: " + id + " is being Deleted.");
         movieRepository.deleteById(id);
     }
 
     @Override
-    public Movie updateMovie(Long id, Movie movie) {
+    public Movie updateMovie(Long id, Movie movie) throws NotFoundException {
         System.out.println("The Following Movie with ID: " + id + " is being Updated.");
         Movie foundMovie = findById(id);
+        System.out.println("The Movie Being Updated is: " + foundMovie.toString());
         if (movie.getCategories() != null) {
             foundMovie.setCategories(movie.getCategories());
         } else if (movie.getType() != null) {
@@ -114,13 +135,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> availableMovies(String typeString, Long categoryId) throws Exception {
+    public List<Movie> availableMovies(String typeString, Long categoryId) throws NotFoundException {
         if (typeString.equals(Type.ORIGINAL.name())) {
             System.out.println("Netflix Original");
         } else if (typeString.equals(Type.SUGGESTED.name())) {
             System.out.println("User Suggested.");
         } else {
-            throw new Exception("Not on Catalogue.");
+            throw new NotFoundException("Not on Catalogue.");
         }
         Type type = Type.valueOf(typeString);
         return movieRepository.findAllByTypeEqualsAndCategoriesEquals(type, categoryService.findById(categoryId));

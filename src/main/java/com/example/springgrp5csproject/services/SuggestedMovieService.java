@@ -7,4 +7,5 @@ import java.util.List;
 public interface SuggestedMovieService {
     SuggestedMovie findById(Long id);
     List<SuggestedMovie> findAllSuggestedMovies();
+    boolean deleteSuggestedMovie(Long id);
 }

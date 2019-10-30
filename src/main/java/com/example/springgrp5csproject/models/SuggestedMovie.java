@@ -22,7 +22,7 @@ public class SuggestedMovie {
     @Column(name = "release_date")
     private String releaseDate;
 
-    @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.ALL})
+    @ManyToMany(mappedBy = "suggestedMovies", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<User> usersWhoSuggested;
 
     private SuggestedMovie() {}
@@ -78,16 +78,16 @@ public class SuggestedMovie {
 
     @Override
     public String toString() {
-        return "Suggested Movie{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", release_date='" + releaseDate + '\'' +
+        return "Suggested Movie { " +
+                "id = " + id +
+                ", name = '" + name + '\'' +
+                ", release_date = '" + releaseDate + '\'' +
                 '}';
     }
 
     public Movie toMovie() {
         Movie movie = new Movie(name, releaseDate);
-        movie.setId(id);
+        movie.setId(this.getId());
         movie.setType(Type.SUGGESTED);
         movie.setUsersWhoSuggested(usersWhoSuggested);
         return movie;

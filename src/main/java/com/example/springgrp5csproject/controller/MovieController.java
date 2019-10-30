@@ -1,5 +1,6 @@
 package com.example.springgrp5csproject.controller;
 
+import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.User;
 import com.example.springgrp5csproject.services.MovieService;
@@ -31,13 +32,8 @@ public class MovieController {
 
 //    Available Movies Using Category Id and Specific Type
     @GetMapping("available/{categoryId}")
-    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam String type) {
-        try {
-            return movieService.availableMovies(type, categoryId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public List<Movie> availableMovies(@PathVariable("categoryId") Long categoryId, @RequestParam String type) throws NotFoundException {
+        return movieService.availableMovies(type, categoryId);
     }
 
 //    Get the Release Date of the Movie with the movie's name
@@ -46,10 +42,16 @@ public class MovieController {
         return movieService.getReleaseDate(movieId);
     }
 
-//    Get all Movies that have been Suggested
-    @GetMapping("suggested")
+//    Get all Movies that have been Suggested and Pending
+    @GetMapping("suggested/pending")
     public List<Movie> suggestedMovies() throws Exception {
         return movieService.suggestedMovies();
+    }
+
+//    Approved Suggested Movies
+    @GetMapping("suggested/approved")
+    public List<Movie> approvedSuggestedMovies() throws Exception {
+        return movieService.approvedSuggestedMovies();
     }
 
 //    Get all Movies that have been Favoured/Liked

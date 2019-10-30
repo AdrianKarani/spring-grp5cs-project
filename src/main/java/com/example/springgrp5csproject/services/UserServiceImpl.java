@@ -1,5 +1,6 @@
 package com.example.springgrp5csproject.services;
 
+import com.example.springgrp5csproject.exception.EntityConflictException;
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.exception.UnauthorizedException;
 import com.example.springgrp5csproject.models.*;
@@ -46,24 +47,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Long id, User user) throws Exception {
+    public User updateUser(Long id, User user) throws UnauthorizedException {
         User foundUser = findById(id);
+        System.out.println("The Following User with ID: " + id + " is being Updated.");
         if (!foundUser.getId().equals(user.getId())) {
-            System.out.println("Unauthorized");
-            throw new Exception("Unauthorized Access to a Different User");
+            throw new UnauthorizedException("Unauthorized Access to a Different User");
         }
-        System.out.println("Authorized");
         foundUser.setName(user.getName());
         return userRepository.save(foundUser);
 
     }
 
     @Override
-    public void deleteUser(Long id, Long idNumber) throws Exception {
-        System.out.println("The Following User with ID: " + id + " is being Deleted.");
+    public void deleteUser(Long id, Long idNumber) throws UnauthorizedException {
         User foundUser = findById(id);
+        System.out.println("The Following User with ID: " + id + " is being Deleted.");
         if (!foundUser.getIdNumber().equals(idNumber)) {
-            throw new Exception("Unauthorized Access to a Different User");
+            throw new UnauthorizedException("Unauthorized Access to a Different User");
         }
         userRepository.deleteById(id);
     }
@@ -84,12 +84,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Movie addFavourite(Long customerId, Long favouriteMovieId) throws Exception {
+    public Movie addFavourite(Long customerId, Long favouriteMovieId) throws NotFoundException {
         User foundUser = findById(customerId);
         Movie foundMovie = movieService.findById(favouriteMovieId);
-        if (foundMovie == null) {
-            throw new Exception("No such Movie Exists");
-        }
         foundUser.setFavouriteMovie(foundMovie);
         userRepository.save(foundUser);
         System.out.println("The Following movie has been added to Favourites.");
@@ -98,12 +95,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Movie postMovie(Long customerId, Movie movie) throws Exception {
+    public Movie postMovie(Long customerId, Movie movie) throws NotFoundException, UnauthorizedException, EntityConflictException {
         User foundUser = findById(customerId);
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
-//            Movie movie = suggestedMovie.toMovie();
             movie.setType(Type.ORIGINAL);
-//            movie.setReleaseDate(suggestedMovie.getReleaseDate());
             System.out.println("The Following movie is being Suggested.");
             System.out.println(movie.toString());
             return movieService.createMovie(movie);
@@ -114,66 +109,86 @@ public class UserServiceImpl implements UserService {
             System.out.println(movie.toString());
             return movie;
         }
-        throw new Exception("No Such User");
+        throw new NotFoundException("No Such User");
     }
 
     @Override
-    public Movie updateMovie(Long customerId, Movie movie, Long movieId) throws Exception {
+    public Movie updateMovie(Long customerId, Movie movie, Long movieId) throws UnauthorizedException, NotFoundException {
         validateUserRole(findById(customerId));
+        System.out.println("The Following User Has been Authorized: " + findById(customerId).toString());
         return movieService.updateMovie(movieId, movie);
     }
 
     @Override
-    public void deleteMovie(Long customerId, Long movieId) throws Exception {
+    public void deleteMovie(Long customerId, Long movieId) throws NotFoundException, UnauthorizedException {
         validateUserRole(findById(customerId));
         movieService.deleteMovie(movieId);
     }
 
     @Override
-    public Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws Exception {
+    public Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws NotFoundException, UnauthorizedException, EntityConflictException {
         validateUserRole(findById(customerId));
         SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);
-//        Movie movie = new Movie(suggestedMovie.getName(), suggestedMovie.getReleaseDate(), Type.SUGGESTED);
         Movie movie = suggestedMovie.toMovie();
         movie.setUsersWhoSuggested(suggestedMovie.getUsersWhoSuggested());
-        movieService.createMovie(movie);
-        System.out.println("The Following movie have been Approved to the Netflix Movie Catalogue.");
-        System.out.println(movie.toString());
+        System.out.println("The Following movie will be Approved to the Netflix Movie Catalogue.");
+        System.out.println("Movie: " + movie.toString());
+        Movie createdMovie = movieService.createMovie(movie);
+        if (createdMovie != null) {
+            deleteSuggestion(customerId, suggestedMovieId);
+            System.out.println("The Following movie has been Approved to the Netflix Movie Catalogue.");
+            System.out.println(createdMovie.toString());
+        }
         return movie;
     }
 
 //    Categories CRUD
     @Override
-    public Category createCategory(Long id, Category category) throws Exception {
+    public Category createCategory(Long id, Category category) throws EntityConflictException {
         validateUserRole(findById(id));
         System.out.println("The Category with ID: " + id + " is being Created.");
         return categoryService.createCategory(category);
     }
 
     @Override
-    public void deleteCategory(Long id, Long categoryId) throws Exception {
-        validateUserRole(findById(id));
+    public void deleteCategory(Long id, Long categoryId) throws NotFoundException {
+        nonExistingUser(findById(id));
         System.out.println("The Category with ID: " + categoryId + " is being Deleted.");
         categoryService.deleteCategory(categoryId);
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) throws Exception {
+    public Category updateCategory(Long id, Category category) throws NotFoundException {
         validateUserRole(findById(id));
         System.out.println("The Category with ID: " + id + " is being Updated.");
         return categoryService.updateCategory(category);
     }
 
     @Override
-    public Category updateCategory(Long id, Category category, Long categoryId) throws Exception {
+    public Category updateCategory(Long id, Category category, Long categoryId) throws NotFoundException {
         validateUserRole(findById(id));
         System.out.println("The Category with ID: " + categoryId + " is being Updated.");
         return categoryService.updateCategory(category, categoryId);
     }
 
+    @Override
+    public boolean deleteSuggestion(Long id, Long movieId) {
+        validateUserRole(findById(id));
+        if (suggestedMovieService.deleteSuggestedMovie(movieId)) {
+            System.out.println("Deleted Suggested Movie");
+        }
+        return true;
+    }
+
     private void validateUserRole(User user) {
         if (!user.getUserRole().equals(UserRole.ADMINISTRATOR)) {
             throw new UnauthorizedException("Unauthorized User Access");
+        }
+    }
+
+    private void nonExistingUser(User user) {
+        if (!user.getUserRole().equals(UserRole.ADMINISTRATOR)) {
+            throw new NotFoundException("No such User");
         }
     }
 }

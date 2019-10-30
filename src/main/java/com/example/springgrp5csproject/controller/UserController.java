@@ -1,5 +1,8 @@
 package com.example.springgrp5csproject.controller;
 
+import com.example.springgrp5csproject.exception.EntityConflictException;
+import com.example.springgrp5csproject.exception.NotFoundException;
+import com.example.springgrp5csproject.exception.UnauthorizedException;
 import com.example.springgrp5csproject.models.Category;
 import com.example.springgrp5csproject.models.Movie;
 import com.example.springgrp5csproject.models.SuggestedMovie;
@@ -42,8 +45,8 @@ public class UserController {
     }
 
 //    Update User with ID
-    @PatchMapping(value = "{id}")
-    public User updateUser(@PathVariable("id") Long id, @Validated(User.Update.class) @RequestBody User user) throws Exception {
+    @PutMapping(value = "{id}")
+    public User updateUser(@PathVariable("id") Long id, @Validated(User.Update.class) @RequestBody User user) throws UnauthorizedException {
         return userService.updateUser(id, user);
     }
 
@@ -62,14 +65,14 @@ public class UserController {
     }
 
     //    Update Movie by Netflix Admin with an ID
-    @PatchMapping(value = "{id}/movies/{movieId}")
-    public Movie updateMovie(@PathVariable(name = "id") Long id, @Validated(Movie.Update.class)@RequestBody Movie movie, @PathVariable Long movieId) throws Exception {
+    @PutMapping(value = "{id}/movies/{movieId}")
+    public Movie updateMovie(@PathVariable(name = "id") Long id, @Validated(Movie.Update.class)@RequestBody Movie movie, @PathVariable Long movieId) throws NotFoundException, UnauthorizedException {
         return userService.updateMovie(id, movie, movieId);
     }
 
     //    Delete Movie
     @DeleteMapping(value = "{id}/movies/{movieId}")
-    public void deleteMovie(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws Exception { userService.deleteMovie(id, movieId); }
+    public void deleteMovie(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws NotFoundException, UnauthorizedException { userService.deleteMovie(id, movieId); }
 
 
 //    Complex Operations
@@ -91,27 +94,34 @@ public class UserController {
         return userService.favouriteMovies(id);
     }
 
+//    Categories
 //    Create a Category
     @PostMapping("{id}/category")
-    public Category createCategory(@PathVariable(name = "id") Long id, @RequestBody Category category) throws Exception {
+    public Category createCategory(@PathVariable(name = "id") Long id, @RequestBody Category category) throws EntityConflictException {
         return userService.createCategory(id, category);
     }
 
 //    Delete a Category
     @DeleteMapping("{id}/category/{categoryId}")
-    public void deleteCategory(@PathVariable(name = "id") Long id, @PathVariable(name = "categoryId") Long categoryId) throws Exception {
+    public void deleteCategory(@PathVariable(name = "id") Long id, @PathVariable(name = "categoryId") Long categoryId) throws NotFoundException {
         userService.deleteCategory(id, categoryId);
     }
 
 //    Update Category with ID
-    @PatchMapping("{id}/category/{categoryId}")
-    public Category updateCategory(@PathVariable(name = "id") Long id, @RequestBody Category category, @PathVariable(name = "categoryId") Long categoryId) throws Exception {
+    @PutMapping("{id}/category/{categoryId}")
+    public Category updateCategory(@PathVariable(name = "id") Long id, @RequestBody Category category, @PathVariable(name = "categoryId") Long categoryId) throws NotFoundException {
         return userService.updateCategory(id, category, categoryId);
     }
 
 //    Approve Suggested Movie
     @PostMapping("{id}/movies/suggested/{movieId}")
-    public Movie approveSuggestion(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws Exception {
+    public Movie approveSuggestion(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws NotFoundException, UnauthorizedException, EntityConflictException {
         return userService.approveSuggestion(id, movieId);
+    }
+
+//    Delete Suggested Movie
+    @DeleteMapping("{id}/movies/suggested/pending/{movieId}")
+    public void deleteSuggestion(@PathVariable("id") Long id, @PathVariable("movieId") Long movieId) {
+        userService.deleteSuggestion(id, movieId);
     }
 }

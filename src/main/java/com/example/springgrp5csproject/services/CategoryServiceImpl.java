@@ -1,5 +1,6 @@
 package com.example.springgrp5csproject.services;
 
+import com.example.springgrp5csproject.exception.EntityConflictException;
 import com.example.springgrp5csproject.exception.NotFoundException;
 import com.example.springgrp5csproject.models.Category;
 import com.example.springgrp5csproject.repositories.CategoryRepository;
@@ -32,27 +33,30 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(Category category) throws Exception {
+    public Category createCategory(Category category) throws EntityConflictException {
         if (!category.equals(categoryRepository.findByNameEquals(category.getName()))) {
             return categoryRepository.save(category);
         }
-        throw new Exception("Category already Exists.");
+        throw new EntityConflictException("Category already Exists.");
     }
 
     @Override
-    public void deleteCategory(Long categoryId) {
+    public void deleteCategory(Long categoryId) throws NotFoundException {
+        if (findById(categoryId) == null) {
+            throw new NotFoundException("No Category exists with ID: " + categoryId);
+        }
         categoryRepository.deleteById(categoryId);
     }
 
     @Override
-    public Category updateCategory(Category category) {
+    public Category updateCategory(Category category) throws NotFoundException {
         Category foundCategory = findById(category.getId());
         foundCategory.setName(category.getName());
         return categoryRepository.save(foundCategory);
     }
 
     @Override
-    public Category updateCategory(Category category, Long categoryId) {
+    public Category updateCategory(Category category, Long categoryId) throws NotFoundException {
         Category foundCategory = findById(categoryId);
         foundCategory.setName(category.getName());
         return categoryRepository.save(foundCategory);
