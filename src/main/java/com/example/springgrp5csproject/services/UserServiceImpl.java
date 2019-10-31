@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -97,12 +98,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public Movie postMovie(Long customerId, Movie movie) throws NotFoundException, UnauthorizedException, EntityConflictException {
         User foundUser = findById(customerId);
+        System.out.println("The Movie's Details are: " + movie.toString());
         if (foundUser.getUserRole().equals(UserRole.ADMINISTRATOR)) {
             movie.setType(Type.ORIGINAL);
             System.out.println("The Following movie is being Suggested.");
             System.out.println(movie.toString());
             return movieService.createMovie(movie);
         } else if (foundUser.getUserRole().equals(UserRole.CUSTOMER)) {
+            System.out.println("Movie Name: " + movie.getName());
+            if (movie.getName().equals(suggestedMovieService.findByName(movie.toSuggestedMovie().getName()))) {
+                throw new EntityConflictException("The Suggested Movie Already Exists");
+            }
             foundUser.setSuggestedMovie(movie.toSuggestedMovie());
             userRepository.save(foundUser);
             System.out.println("The Following movie has been Suggested.");
@@ -126,20 +132,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws NotFoundException, UnauthorizedException, EntityConflictException {
+    public Movie approveSuggestion(Long customerId, Long suggestedMovieId, Set<Category> categories) throws NotFoundException, UnauthorizedException, EntityConflictException {
         validateUserRole(findById(customerId));
         SuggestedMovie suggestedMovie = suggestedMovieService.findById(suggestedMovieId);
         Movie movie = suggestedMovie.toMovie();
+        movie.setCategories(categories);
         movie.setUsersWhoSuggested(suggestedMovie.getUsersWhoSuggested());
-        System.out.println("The Following movie will be Approved to the Netflix Movie Catalogue.");
-        System.out.println("Movie: " + movie.toString());
+        System.out.println("Approving.....");
         Movie createdMovie = movieService.createMovie(movie);
         if (createdMovie != null) {
             deleteSuggestion(customerId, suggestedMovieId);
             System.out.println("The Following movie has been Approved to the Netflix Movie Catalogue.");
             System.out.println(createdMovie.toString());
+            return createdMovie;
+        } else {
+            System.out.println("Movie Created is Null");
+            throw new EntityConflictException("Null Object");
         }
-        return movie;
     }
 
 //    Categories CRUD

@@ -69,22 +69,22 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public List<Movie> approvedSuggestedMovies() throws Exception {
         System.out.println("Finding the List of Approved Suggested Movies.");
-        int i = 0;
-        List<Movie> movies = movieRepository.findAllByTypeEquals(Type.SUGGESTED);
-        List<Movie> approvedMovies = new ArrayList<Movie>();
         System.out.println("List of Approved Suggested Movie: ");
-        while (i != movies.size()) {
-            Movie movie = movies.get(i);
-            System.out.println(movie);
-            approvedMovies.add(movie);
-            i++;
-        }
-        return movies;
+        return movieRepository.findAllByTypeEquals(Type.SUGGESTED);
+//        int i = 0;
+//        List<Movie> approvedMovies = new ArrayList<Movie>();
+//        while (i != movies.size()) {
+//            Movie movie = movies.get(i);
+//            System.out.println(movie);
+//            approvedMovies.add(movie);
+//            i++;
+//        }
+//        return movies;
     }
 
     @Override
     public Movie createMovie(Movie movie) throws EntityConflictException {
-        if (!movie.equals(movieRepository.findByNameEquals(movie.getName())) || !movie.equals(movieRepository.findByReleaseDateEquals(movie.getReleaseDate()))) {
+        if (movieRepository.findByNameEqualsAndReleaseDateEquals(movie.getName(), movie.getReleaseDate()) == null) {
             return movieRepository.save(movie);
         }
         throw new EntityConflictException("Movie already Exists.");

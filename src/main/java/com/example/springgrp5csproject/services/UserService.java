@@ -28,7 +28,7 @@ public interface UserService {
     Movie postMovie(Long customerId, Movie movie) throws NotFoundException, UnauthorizedException, EntityConflictException;
     Movie updateMovie(Long customerId, Movie movie, Long movieId) throws UnauthorizedException;
     void deleteMovie(Long customerId, Long movieId) throws NotFoundException, UnauthorizedException;
-    Movie approveSuggestion(Long customerId, Long suggestedMovieId) throws NotFoundException, UnauthorizedException, EntityConflictException;
+    Movie approveSuggestion(Long customerId, Long suggestedMovieId, Set<Category> categories) throws NotFoundException, UnauthorizedException, EntityConflictException;
 
 //    Category CRUD
     public Category createCategory(Long id, Category category) throws EntityConflictException;

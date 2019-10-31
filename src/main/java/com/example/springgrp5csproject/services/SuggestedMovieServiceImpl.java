@@ -21,6 +21,11 @@ public class SuggestedMovieServiceImpl implements SuggestedMovieService {
     }
 
     @Override
+    public SuggestedMovie findByName(String name) {
+        return suggestedMovieRepository.findByNameEquals(name);
+    }
+
+    @Override
     public List<SuggestedMovie> findAllSuggestedMovies() {
         return suggestedMovieRepository.findAll();
     }
@@ -30,8 +35,7 @@ public class SuggestedMovieServiceImpl implements SuggestedMovieService {
         if (findById(id) == null) {
             throw new NotFoundException("Suggested Movie is Not Found with ID: " + id);
         }
-        System.out.println("The Following movie will be Deleted From Pending. With ID: " + id);
-        System.out.println("The Following movie will be Deleted From Pending. With ID: " + findById(id).toString());
+        System.out.println("The Following movie will be Deleted From Pending: " + findById(id).toString());
         suggestedMovieRepository.deleteById(id);
         return true;
     }

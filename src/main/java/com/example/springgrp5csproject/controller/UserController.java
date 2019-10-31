@@ -60,7 +60,7 @@ public class UserController {
 //    Movies
 //    User can either suggest a Movie to Netflix if a normal Customer, or create a Movie, if they are an Admin
     @PostMapping("{id}/movies")
-    public Movie postMovie(@PathVariable(name = "id") Long id, @RequestBody Movie movie) throws Exception {
+    public Movie postMovie(@PathVariable(name = "id") Long id, @RequestBody Movie movie) throws NotFoundException, UnauthorizedException, EntityConflictException {
         return userService.postMovie(id, movie);
     }
 
@@ -115,8 +115,8 @@ public class UserController {
 
 //    Approve Suggested Movie
     @PostMapping("{id}/movies/suggested/{movieId}")
-    public Movie approveSuggestion(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId) throws NotFoundException, UnauthorizedException, EntityConflictException {
-        return userService.approveSuggestion(id, movieId);
+    public Movie approveSuggestion(@PathVariable(name = "id") Long id, @PathVariable(name = "movieId") Long movieId, @RequestBody Set<Category> categories) throws NotFoundException, UnauthorizedException, EntityConflictException {
+        return userService.approveSuggestion(id, movieId, categories);
     }
 
 //    Delete Suggested Movie
